@@ -215,7 +215,7 @@ export function LandingPage({ onEnter }: Props) {
         <div className="relative z-10 max-w-4xl mx-auto px-8 text-center">
           <div className="inline-flex items-center gap-2 bg-white/15 border border-white/20 rounded-full px-4 py-1.5 text-sm font-medium mb-8 backdrop-blur-sm">
             <Sparkles size={14} className="text-[#C4963B]" />
-            Powered by Claude AI · Verified SCU Faculty · No sign-up
+            Verified SCU Faculty · No sign-up
           </div>
 
           <h1 className="text-5xl sm:text-7xl font-extrabold leading-[1.05] tracking-tight mb-6">
@@ -252,7 +252,7 @@ export function LandingPage({ onEnter }: Props) {
               { val: '300+', label: 'Professors' },
               { val: 'All 6', label: 'Schools' },
               { val: 'Current', label: 'SCU Faculty' },
-              { val: 'Claude AI', label: 'Advisor' },
+              { val: 'AI', label: 'Advisor' },
             ].map(s => (
               <div key={s.label} className="bg-white/10 border border-white/15 backdrop-blur-sm rounded-xl px-5 py-3 text-center">
                 <div className="text-xl font-bold text-[#C4963B]">{s.val}</div>
