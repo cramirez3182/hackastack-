@@ -215,7 +215,7 @@ export function LandingPage({ onEnter }: Props) {
         <div className="relative z-10 max-w-4xl mx-auto px-8 text-center">
           <div className="inline-flex items-center gap-2 bg-white/15 border border-white/20 rounded-full px-4 py-1.5 text-sm font-medium mb-8 backdrop-blur-sm">
             <Sparkles size={14} className="text-[#C4963B]" />
-            Verified SCU Faculty · No sign-up
+            Powered by Tencent · Verified SCU Faculty · No sign-up
           </div>
 
           <h1 className="text-5xl sm:text-7xl font-extrabold leading-[1.05] tracking-tight mb-6">
