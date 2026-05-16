@@ -291,16 +291,29 @@ export function TencentVoiceChat({ professors, onClose }: Props) {
 export function VoiceChatButton({ onClick, isOpen }: { onClick: () => void; isOpen: boolean }) {
   if (isOpen) return null
   return (
-    <button
-      type="button"
-      onClick={onClick}
-      className="fixed bottom-6 right-6 z-40 w-14 h-14 bg-gradient-to-br from-[#862633] to-[#5c1a23] text-white rounded-full shadow-xl hover:shadow-2xl hover:scale-110 transition-all duration-200 flex items-center justify-center group"
-      title="Open Voice AI Advisor"
-    >
-      <Mic size={22} />
-      <span className="absolute -top-8 right-0 bg-gray-800 text-white text-xs px-2 py-1 rounded-lg opacity-0 group-hover:opacity-100 transition-opacity whitespace-nowrap pointer-events-none">
-        Voice AI Advisor
-      </span>
-    </button>
+    <div className="fixed bottom-0 left-0 right-0 z-40 flex justify-center px-4 pb-4 pointer-events-none">
+      <button
+        type="button"
+        onClick={onClick}
+        className="pointer-events-auto flex items-center gap-3 bg-gradient-to-r from-[#862633] to-[#5c1a23] text-white px-5 py-3 rounded-2xl shadow-2xl hover:shadow-[0_8px_30px_rgba(134,38,51,0.5)] hover:scale-105 transition-all duration-200 group"
+      >
+        {/* Pulse ring */}
+        <div className="relative flex-shrink-0">
+          <span className="absolute inset-0 rounded-full bg-white/30 animate-ping" />
+          <div className="relative w-9 h-9 bg-white/20 rounded-full flex items-center justify-center">
+            <Mic size={18} />
+          </div>
+        </div>
+
+        <div className="text-left">
+          <div className="text-sm font-bold leading-tight">Ask our AI Advisor</div>
+          <div className="text-[11px] text-white/75 leading-tight">Voice chat · Ask anything about professors</div>
+        </div>
+
+        <div className="ml-1 bg-white/20 rounded-lg px-2 py-1 text-[11px] font-semibold flex-shrink-0 group-hover:bg-white/30 transition-colors">
+          Talk now →
+        </div>
+      </button>
+    </div>
   )
 }
