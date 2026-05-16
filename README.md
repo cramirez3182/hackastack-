@@ -1,39 +1,52 @@
-# SCU Professor Finder
+# SCU Course Optimizer
 
-A web app that helps Santa Clara University students discover professors using data from the **SCU faculty directory** and **RateMyProfessors**.
+A web app for **Santa Clara University** students to explore professors using the official **SCU faculty directory**, **RateMyProfessors** (school ID 1078), and **registrar schedule PDFs** (Workday exports). Built for Hackastack.
 
 ## What it does
 
-- **Scrapes** faculty listings from SCU school directory pages (CAS, Business, Engineering, Law, etc.)
-- **Fetches** ratings, difficulty, tags, and courses from RateMyProfessors (SCU school ID 1078)
-- **Merges** both sources into a local SQLite database
-- **Serves** a filterable API and React UI so students can search by department, rating, tenure status, tags, and more
-- **Interactive UI**: guided search wizard, quick presets, compare up to 3 professors, save favorites, click tags to filter
-- **Optional AI chat** (Anthropic) to get personalized professor recommendations
-- **Demo mode** when the backend is offline so you can still explore the UI
+- **Scrapes** faculty from SCU school directory pages (CAS, Business, Engineering, Law, and more)
+- **Parses** undergraduate schedule PDFs from the Registrar for courses, sections, and weekly meeting times
+- **Fetches** ratings, difficulty, tags, and courses from RateMyProfessors
+- **Merges** everything into a local SQLite database (`backend/data/professors.db`)
+- **Serves** a filterable FastAPI backend and a React UI with grid and calendar views
+- **Landing page** with product overview before entering the app
+- **Search & filters**: department, school, rating, difficulty, would-take-again %, tenure, course code, RMP tags, sort options
+- **Guided wizard**, quick presets, compare up to 3 professors, favorites, click tags to filter
+- **AI voice advisor** (optional): real-time voice via Tencent TRTC — Deepgram STT, OpenAI-compatible LLM, ElevenLabs TTS
+- **Demo mode**: if the API is unreachable, the UI falls back to bundled sample data
 
 ## Project structure
 
 ```
 hackastack-/
 ├── backend/
-│   ├── api/           # FastAPI server
-│   ├── scraper/       # SCU + RMP scrapers
-│   ├── data/          # SQLite DB (created by scraper)
+│   ├── api/                 # FastAPI server (professors, departments, tags, health)
+│   ├── scraper/
+│   │   ├── scu_scraper.py       # SCU faculty directory
+│   │   ├── schedule_scraper.py  # Registrar schedule PDFs
+│   │   ├── rmp_scraper.py       # RateMyProfessors
+│   │   └── run_scraper.py       # Merge pipeline
+│   ├── scripts/
+│   │   ├── db_stats.py          # Quick DB counts
+│   │   └── test_rmp.py          # RMP fetch smoke test
+│   ├── trtc/                    # Optional Node voice-AI server (port 3000)
+│   ├── data/                    # SQLite DB (created by scraper; not committed)
 │   ├── requirements.txt
 │   └── .env.example
-└── frontend/          # React + Vite + Tailwind
+└── frontend/                    # React + Vite + Tailwind
+    ├── src/
+    └── .env.example             # Optional Anthropic key (legacy text-chat middleware)
 ```
 
 ## Prerequisites
 
-- Python 3.11+
-- Node.js 18+
-- (Optional) [Anthropic API key](https://console.anthropic.com/) for the chat feature
+- **Python 3.11+**
+- **Node.js 18+**
+- For voice AI (optional): Tencent Cloud TRTC, Deepgram, OpenAI (or compatible), and ElevenLabs credentials — see `backend/trtc/.env.example`
 
 ## Quick start
 
-### 1. Backend setup
+### 1. Backend
 
 ```bash
 cd backend
@@ -47,17 +60,36 @@ python -m venv .venv
 
 pip install -r requirements.txt
 cp .env.example .env
-# Edit .env and add ANTHROPIC_API_KEY if you want AI chat
 ```
 
-### 2. Run the scraper (populate the database)
+Edit `backend/.env` if needed (`DATABASE_PATH`, optional `ANTHROPIC_API_KEY` for the backend `/api/chat` endpoint).
+
+### 2. Populate the database
 
 ```bash
 # From backend/ with venv activated
+# On Windows, if the scraper prints Unicode errors, run:
+#   $env:PYTHONIOENCODING = "utf-8"
 python -m scraper.run_scraper
 ```
 
-This writes `backend/data/professors.db`. Re-run periodically to refresh data.
+Pipeline steps:
+
+1. Parse registrar schedule PDFs  
+2. Scrape SCU faculty directory  
+3. Fetch RateMyProfessors (SCU)  
+4. Merge and write `backend/data/professors.db`
+
+Re-run when a new term’s schedule PDF is published (update URLs in `scraper/schedule_scraper.py` if needed).
+
+Debug individual modules:
+
+```bash
+python -m scraper.scu_scraper
+python -m scraper.rmp_scraper
+python scripts/test_rmp.py
+python scripts/db_stats.py
+```
 
 ### 3. Start the API
 
@@ -68,7 +100,7 @@ uvicorn api.main:app --reload --port 8000
 
 Health check: http://localhost:8000/api/health
 
-### 4. Frontend setup
+### 4. Frontend
 
 In a second terminal:
 
@@ -78,22 +110,21 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173 — the Vite dev server proxies `/api` to the backend.
+Open http://localhost:5173 — Vite proxies `/api` to the backend on port 8000.
 
-## Scraper modules
+### 5. Voice AI (optional)
 
-| Module | Purpose |
-|--------|---------|
-| `scraper/scu_scraper.py` | SCU faculty directory pages |
-| `scraper/rmp_scraper.py` | RateMyProfessors GraphQL API |
-| `scraper/run_scraper.py` | Merges both sources into SQLite |
-
-Run individual scrapers for debugging:
+In a third terminal:
 
 ```bash
-python -m scraper.scu_scraper
-python -m scraper.rmp_scraper
+cd backend/trtc
+npm install express tencentcloud-sdk-nodejs-trtc dotenv
+cp .env.example .env
+# Fill in Tencent, Deepgram, LLM, and ElevenLabs credentials
+node index.js
 ```
+
+The frontend proxies `/trtc-api/*` → `http://localhost:3000`. Voice chat uses the Tencent TRTC Web SDK (loaded in `frontend/index.html`).
 
 ## API endpoints
 
@@ -101,24 +132,24 @@ python -m scraper.rmp_scraper
 |--------|------|-------------|
 | GET | `/api/professors` | List/filter professors |
 | GET | `/api/professors/{id}` | Single professor |
-| GET | `/api/departments` | All departments |
+| GET | `/api/departments` | Departments and schools |
 | GET | `/api/tags` | Popular RMP tags |
-| POST | `/api/chat` | AI advisor (needs API key) |
+| POST | `/api/chat` | Text advisor (requires `ANTHROPIC_API_KEY` in `backend/.env`) |
 | GET | `/api/health` | Health check |
+
+In dev, `frontend/vite.config.ts` can also handle `POST /api/chat` when `ANTHROPIC_API_KEY` is set in `frontend/.env` (the live app UI uses **Tencent voice chat**, not this text path).
 
 ## Legal & ethics
 
-- Use scraped data for **educational / personal** course planning only.
-- Respect SCU and RateMyProfessors terms of service; do not hammer endpoints (the scraper includes delays).
-- Do not commit `.env` or database files with personal data.
-
-## Contributing
-
-1. Fork the repo
-2. Create a branch (`git checkout -b feature/your-feature`)
-3. Commit and push
-4. Open a pull request
+- Use data for **educational / personal** course planning only.
+- Respect SCU, the Registrar, and RateMyProfessors terms of service; the scrapers use delays — do not hammer endpoints.
+- Do not commit `.env`, API keys, or `backend/data/professors.db`.
 
 ## Team
 
-Built for SCU students — Hackastack project (Jorge, Cuitlahuac, Damian, and Estevan).
+Hackastack — Santa Clara University
+
+- Cuitlahuac Ramirez Borrego  
+- Estevan Rodriguez  
+- Jorge Garcia Diaz  
+- Damian Barba  
