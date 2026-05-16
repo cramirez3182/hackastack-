@@ -75,9 +75,9 @@ python -m scraper.run_scraper
 
 Pipeline steps:
 
-1. Parse registrar schedule PDFs  
-2. Scrape SCU faculty directory  
-3. Fetch RateMyProfessors (SCU)  
+1. Parse registrar schedule PDFs
+2. Scrape SCU faculty directory
+3. Fetch RateMyProfessors (SCU)
 4. Merge and write `backend/data/professors.db`
 
 Re-run when a new term’s schedule PDF is published (update URLs in `scraper/schedule_scraper.py` if needed).
@@ -98,7 +98,7 @@ python scripts/db_stats.py
 uvicorn api.main:app --reload --port 8000
 ```
 
-Health check: http://localhost:8000/api/health
+Health check: [http://localhost:8000/api/health](http://localhost:8000/api/health)
 
 ### 4. Frontend
 
@@ -110,7 +110,7 @@ npm install
 npm run dev
 ```
 
-Open http://localhost:5173 — Vite proxies `/api` to the backend on port 8000.
+Open [http://localhost:5173](http://localhost:5173) — Vite proxies `/api` to the backend on port 8000.
 
 ### 5. Voice AI (optional)
 
@@ -128,14 +128,16 @@ The frontend proxies `/trtc-api/*` → `http://localhost:3000`. Voice chat uses 
 
 ## API endpoints
 
-| Method | Path | Description |
-|--------|------|-------------|
-| GET | `/api/professors` | List/filter professors |
-| GET | `/api/professors/{id}` | Single professor |
-| GET | `/api/departments` | Departments and schools |
-| GET | `/api/tags` | Popular RMP tags |
-| POST | `/api/chat` | Text advisor (requires `ANTHROPIC_API_KEY` in `backend/.env`) |
-| GET | `/api/health` | Health check |
+
+| Method | Path                   | Description                                                   |
+| ------ | ---------------------- | ------------------------------------------------------------- |
+| GET    | `/api/professors`      | List/filter professors                                        |
+| GET    | `/api/professors/{id}` | Single professor                                              |
+| GET    | `/api/departments`     | Departments and schools                                       |
+| GET    | `/api/tags`            | Popular RMP tags                                              |
+| POST   | `/api/chat`            | Text advisor (requires `ANTHROPIC_API_KEY` in `backend/.env`) |
+| GET    | `/api/health`          | Health check                                                  |
+
 
 In dev, `frontend/vite.config.ts` can also handle `POST /api/chat` when `ANTHROPIC_API_KEY` is set in `frontend/.env` (the live app UI uses **Tencent voice chat**, not this text path).
 
@@ -147,9 +149,10 @@ In dev, `frontend/vite.config.ts` can also handle `POST /api/chat` when `ANTHROP
 
 ## Team
 
-Hackastack — Santa Clara University
+Project for Hack-A-Stack Hackathon with AI Collaborate and ACM — Santa Clara University
 
 - Cuitlahuac Ramirez Borrego  
 - Estevan Rodriguez  
 - Jorge Garcia Diaz  
-- Damian Barba  
+- Damian Barba
+
