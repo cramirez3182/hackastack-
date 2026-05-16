@@ -6,6 +6,7 @@ Run with: python -m scraper.run_scraper
 import asyncio
 import hashlib
 import os
+import re
 import sys
 
 sys.path.insert(0, os.path.dirname(os.path.dirname(os.path.abspath(__file__))))
@@ -14,6 +15,16 @@ from api.database import init_db, upsert_professor, get_db
 from scraper.scu_scraper import scrape_all_faculty
 from scraper.rmp_scraper import fetch_all_scu_professors, normalize_rmp_professor
 from scraper.schedule_scraper import scrape_schedule_sections, build_instructor_records
+
+_COURSE_NORM_RE = re.compile(r'^([A-Z]{2,6})\s*(\d+.*)$')
+
+
+def normalize_course(code: str) -> str:
+    """Normalize 'ANTH2' and 'ANTH 2' to the same canonical 'ANTH 2'."""
+    m = _COURSE_NORM_RE.match(code.strip().upper())
+    if m:
+        return f"{m.group(1)} {m.group(2).strip()}"
+    return code.strip().upper()
 
 
 def make_id(name: str, dept: str) -> str:
@@ -40,8 +51,8 @@ def find_schedule_match(full_name: str, schedule_profs: dict[str, dict]) -> dict
 
 
 def merge_schedule(prof: dict, sched: dict) -> None:
-    existing_courses = set(prof.get("courses_taught") or [])
-    existing_courses.update(sched.get("courses_taught") or [])
+    existing_courses = {normalize_course(c) for c in (prof.get("courses_taught") or [])}
+    existing_courses.update(normalize_course(c) for c in (sched.get("courses_taught") or []))
     prof["courses_taught"] = sorted(existing_courses)
 
     existing_schedule = prof.get("schedule") or []
@@ -119,7 +130,8 @@ async def run():
                         "tags": rmp["tags"],
                     })
                     prof["courses_taught"] = sorted(
-                        set(prof["courses_taught"]) | set(rmp.get("courses_taught") or [])
+                        {normalize_course(c) for c in prof["courses_taught"]}
+                        | {normalize_course(c) for c in (rmp.get("courses_taught") or [])}
                     )
                     rmp_matched.add(rmp["rmp_id"])
                     merged_count += 1
@@ -148,6 +160,7 @@ async def run():
                 "would_take_again_percent": -1.0,
                 "tags": [],
             }
+            prof["courses_taught"] = sorted(normalize_course(c) for c in prof.get("courses_taught") or [])
             last = sched["last_name"].lower()
             for rmp in rmp_by_lastname.get(last, []):
                 if fuzzy_match(sched["full_name"], rmp["full_name"]):
@@ -160,7 +173,8 @@ async def run():
                         "tags": rmp["tags"],
                     })
                     prof["courses_taught"] = sorted(
-                        set(prof["courses_taught"]) | set(rmp.get("courses_taught") or [])
+                        {normalize_course(c) for c in prof["courses_taught"]}
+                        | {normalize_course(c) for c in (rmp.get("courses_taught") or [])}
                     )
                     rmp_matched.add(rmp["rmp_id"])
                     merged_count += 1
@@ -193,7 +207,7 @@ async def run():
                 "num_ratings": rmp["num_ratings"],
                 "would_take_again_percent": rmp["would_take_again_percent"],
                 "tags": rmp["tags"],
-                "courses_taught": rmp["courses_taught"],
+                "courses_taught": sorted(normalize_course(c) for c in (rmp.get("courses_taught") or [])),
                 "schedule": [],
             }
             await upsert_professor(db, prof)

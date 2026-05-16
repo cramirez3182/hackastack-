@@ -29,6 +29,7 @@ export function ProfessorCard({
   const textColor = SCHOOL_TEXT_COLORS[p.school] ?? 'text-gray-700'
   const dotColor = SCHOOL_COLORS[p.school] ?? 'bg-gray-400'
   const teachingSlots = groupSchedule(p.schedule)
+  const uniqueCourses = [...new Set(p.courses_taught.map(c => c.replace(/([A-Z]+)\s*(\d)/, '$1 $2').trim()))]
 
   if (compact) {
     return (
@@ -207,12 +208,12 @@ export function ProfessorCard({
               <p className="text-[10px] text-gray-400">+{teachingSlots.length - 2} more section{teachingSlots.length - 2 > 1 ? 's' : ''}</p>
             )}
           </div>
-        ) : p.courses_taught.length > 0 ? (
+        ) : uniqueCourses.length > 0 ? (
           <div className="mt-2 flex items-center gap-1.5 pt-2 border-t border-gray-100/80">
             <BookOpen size={11} className="text-gray-400 flex-shrink-0" />
             <p className="text-xs text-gray-500 truncate">
-              {p.courses_taught.slice(0, 3).join(' · ')}
-              {p.courses_taught.length > 3 && <span className="text-gray-400"> +{p.courses_taught.length - 3}</span>}
+              {uniqueCourses.slice(0, 3).join(' · ')}
+              {uniqueCourses.length > 3 && <span className="text-gray-400"> +{uniqueCourses.length - 3}</span>}
             </p>
           </div>
         ) : null}

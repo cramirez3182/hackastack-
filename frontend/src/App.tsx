@@ -42,7 +42,7 @@ export default function App() {
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false)
   const [showScrollTop, setShowScrollTop] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
-  const { favoriteIds, favoriteNames, toggle: toggleFavorite, isFavorite } = useFavorites()
+  const { favoriteIds, toggle: toggleFavorite, isFavorite } = useFavorites()
 
 
   useEffect(() => {
@@ -56,10 +56,9 @@ export default function App() {
 
   const professors = useMemo(() => {
     if (!showFavoritesOnly) return allProfessors
-    return allProfessors.filter(
-      p => favoriteIds.includes(p.id) || favoriteNames.includes(p.full_name),
-    )
-  }, [allProfessors, showFavoritesOnly, favoriteIds, favoriteNames])
+    const idSet = new Set(favoriteIds)
+    return allProfessors.filter(p => idSet.has(p.id))
+  }, [allProfessors, showFavoritesOnly, favoriteIds])
 
   const previewCount = useMemo(() => professors.length, [professors])
 

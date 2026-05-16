@@ -15,6 +15,7 @@ export function useFavorites() {
       const parsed = JSON.parse(raw)
       if (!Array.isArray(parsed)) return []
 
+      const seen = new Set<string>()
       return parsed
         .map(item => {
           if (typeof item === 'string') {
@@ -25,7 +26,12 @@ export function useFavorites() {
           }
           return null
         })
-        .filter((item): item is FavoriteEntry => item !== null)
+        .filter((item): item is FavoriteEntry => {
+          if (!item) return false
+          if (seen.has(item.id)) return false
+          seen.add(item.id)
+          return true
+        })
     } catch {
       return []
     }
