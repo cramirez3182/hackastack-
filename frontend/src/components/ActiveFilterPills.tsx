@@ -22,12 +22,6 @@ export function ActiveFilterPills({ filters, onChange, showFavoritesOnly, onTogg
   if (filters.hasSchedule === 'yes') pills.push({ label: 'Has schedule', clear: () => onChange({ hasSchedule: 'all' }) })
   if (filters.hasSchedule === 'no') pills.push({ label: 'No schedule', clear: () => onChange({ hasSchedule: 'all' }) })
   if (filters.course) pills.push({ label: filters.course, clear: () => onChange({ course: '' }) })
-  filters.tags.forEach(tag => {
-    pills.push({
-      label: tag,
-      clear: () => onChange({ tags: filters.tags.filter(t => t !== tag) }),
-    })
-  })
 
   if (pills.length === 0 && !onToggleFavorites) return null
 
@@ -66,13 +60,12 @@ export function ActiveFilterPills({ filters, onChange, showFavoritesOnly, onTogg
               search: '',
               department: '',
               school: '',
-            minRating: 0,
-            maxDifficulty: 5,
-            minWouldTakeAgain: 0,
-            tenureTrack: 'all',
-            hasSchedule: 'yes',
-            course: '',
-            tags: [],
+              minRating: 0,
+              maxDifficulty: 5,
+              minWouldTakeAgain: 0,
+              tenureTrack: 'all',
+              hasSchedule: 'yes',
+              course: '',
             })
           }
           className="text-xs text-gray-400 hover:text-red-500 ml-1"

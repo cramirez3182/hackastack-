@@ -1,5 +1,5 @@
 import { useQuery } from '@tanstack/react-query'
-import { fetchProfessors, fetchDepartments, fetchTags } from '../api/professors'
+import { fetchProfessors, fetchDepartments } from '../api/professors'
 import { DEMO_PROFESSORS } from '../data/demoProfessors'
 import { filterProfessors } from '../utils/filterProfessors'
 import type { Filters } from '../types/professor'
@@ -44,28 +44,6 @@ export function useDepartments() {
           }
         }
         return list
-      }
-    },
-    staleTime: 300_000,
-  })
-}
-
-export function useTags() {
-  return useQuery({
-    queryKey: ['tags'],
-    queryFn: async () => {
-      try {
-        return await fetchTags()
-      } catch {
-        const counts: Record<string, number> = {}
-        for (const p of DEMO_PROFESSORS) {
-          for (const tag of p.tags) {
-            counts[tag] = (counts[tag] ?? 0) + 1
-          }
-        }
-        return Object.entries(counts)
-          .map(([tag, count]) => ({ tag, count }))
-          .sort((a, b) => b.count - a.count)
       }
     },
     staleTime: 300_000,

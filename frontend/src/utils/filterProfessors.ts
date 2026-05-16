@@ -55,11 +55,6 @@ export function filterProfessors(professors: Professor[], filters: Filters): Pro
     result = result.filter(p => (p.schedule?.length ?? 0) === 0)
   }
 
-  for (const tag of filters.tags) {
-    const t = tag.toLowerCase()
-    result = result.filter(p => p.tags.some(pt => pt.toLowerCase().includes(t)))
-  }
-
   const sortKey = filters.sortBy
   const dir = filters.sortDir === 'asc' ? 1 : -1
   result.sort((a, b) => {

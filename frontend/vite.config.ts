@@ -65,7 +65,6 @@ function claudeMiddleware(apiKey: string) {
             if (k === 'maxDifficulty' && v === 5) return false
             if (k === 'minWouldTakeAgain' && v === 0) return false
             if (k === 'tenureTrack' && v === 'all') return false
-            if (k === 'tags' && (v as string[]).length === 0) return false
             if (!v) return false
             if (k === 'sortBy' || k === 'sortDir') return false
             return true

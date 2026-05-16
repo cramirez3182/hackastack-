@@ -1,5 +1,5 @@
 import type { ReactNode } from 'react'
-import { Sparkles, Star, Leaf, Zap, Heart } from 'lucide-react'
+import { Sparkles, Star, Leaf, Zap } from 'lucide-react'
 import type { Filters } from '../types/professor'
 
 export interface QuickPreset {
@@ -27,12 +27,6 @@ export const QUICK_PRESETS: QuickPreset[] = [
     label: 'Engineering',
     icon: <Zap size={14} />,
     filters: { school: 'School of Engineering', sortBy: 'avg_rating', sortDir: 'desc' },
-  },
-  {
-    id: 'favorites-vibe',
-    label: 'Caring profs',
-    icon: <Heart size={14} />,
-    filters: { tags: ['Caring'], minRating: 4 },
   },
 ]
 

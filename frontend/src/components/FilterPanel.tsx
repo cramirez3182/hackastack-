@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import { SlidersHorizontal, ChevronDown, ChevronUp, X, Search } from 'lucide-react'
 import type { Filters } from '../types/professor'
-import { useDepartments, useTags } from '../hooks/useProfessors'
+import { useDepartments } from '../hooks/useProfessors'
 
 interface Props {
   filters: Filters
@@ -37,33 +37,22 @@ function SliderField({
 
 export function FilterPanel({ filters, searchInput, onSearchInputChange, onChange, total }: Props) {
   const [ratingsOpen, setRatingsOpen] = useState(true)
-  const [deptOpen, setDeptOpen] = useState(true)
-  const [tagsOpen, setTagsOpen] = useState(false)
+  const [deptOpen, setDeptOpen] = useState(false)
   const [sortOpen, setSortOpen] = useState(false)
 
   const { data: deptData } = useDepartments()
-  const { data: tagData } = useTags()
-
-  const schools = [...new Set(deptData?.map(d => d.school) ?? [])]
 
   const hasActiveFilters =
-    filters.search || filters.department || filters.school ||
+    filters.search || filters.department ||
     filters.minRating > 0 || filters.maxDifficulty < 5 ||
     filters.minWouldTakeAgain > 0 || filters.tenureTrack !== 'all' ||
     filters.hasSchedule !== 'all' ||
-    filters.course || filters.tags.length > 0
+    filters.course
 
   const resetAll = () => onChange({
     search: '', department: '', school: '', minRating: 0, maxDifficulty: 5,
-    minWouldTakeAgain: 0, tenureTrack: 'all', hasSchedule: 'yes', course: '', tags: [],
+    minWouldTakeAgain: 0, tenureTrack: 'all', hasSchedule: 'yes', course: '',
   })
-
-  const toggleTag = (tag: string) => {
-    const newTags = filters.tags.includes(tag)
-      ? filters.tags.filter(t => t !== tag)
-      : [...filters.tags, tag]
-    onChange({ tags: newTags })
-  }
 
   return (
     <aside className="w-72 flex-shrink-0 bg-white border-r border-gray-200 h-full min-h-0 overflow-y-auto overscroll-contain">
@@ -199,70 +188,26 @@ export function FilterPanel({ filters, searchInput, onSearchInputChange, onChang
 
         <hr className="border-gray-100" />
 
-        {/* Department / School */}
+        {/* Department */}
         <section>
           <button
             onClick={() => setDeptOpen(o => !o)}
             className="flex items-center justify-between w-full text-sm font-semibold text-gray-700 mb-2"
           >
-            School / Department
+            Department
             {deptOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
           </button>
           {deptOpen && (
-            <div className="space-y-2">
-              <select
-                value={filters.school}
-                onChange={e => onChange({ school: e.target.value, department: '' })}
-                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">All Schools</option>
-                {schools.map(s => (
-                  <option key={s} value={s}>{s}</option>
-                ))}
-              </select>
-              <select
-                value={filters.department}
-                onChange={e => onChange({ department: e.target.value })}
-                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
-              >
-                <option value="">All Departments</option>
-                {(deptData ?? [])
-                  .filter(d => !filters.school || d.school === filters.school)
-                  .map(d => (
-                    <option key={d.department} value={d.department}>{d.department}</option>
-                  ))}
-              </select>
-            </div>
-          )}
-        </section>
-
-        <hr className="border-gray-100" />
-
-        {/* Tags */}
-        <section>
-          <button
-            onClick={() => setTagsOpen(o => !o)}
-            className="flex items-center justify-between w-full text-sm font-semibold text-gray-700 mb-2"
-          >
-            Student Tags {filters.tags.length > 0 && <span className="bg-blue-100 text-blue-700 text-xs px-1.5 py-0.5 rounded-full">{filters.tags.length}</span>}
-            {tagsOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
-          </button>
-          {tagsOpen && (
-            <div className="flex flex-wrap gap-1.5">
-              {(tagData ?? []).slice(0, 20).map(({ tag }) => (
-                <button
-                  key={tag}
-                  onClick={() => toggleTag(tag)}
-                  className={`text-xs px-2 py-1 rounded-full border transition-colors ${
-                    filters.tags.includes(tag)
-                      ? 'bg-blue-600 border-blue-600 text-white'
-                      : 'border-gray-200 text-gray-600 hover:border-blue-400 bg-white'
-                  }`}
-                >
-                  {tag}
-                </button>
+            <select
+              value={filters.department}
+              onChange={e => onChange({ department: e.target.value })}
+              className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            >
+              <option value="">All Departments</option>
+              {(deptData ?? []).map(d => (
+                <option key={d.department} value={d.department}>{d.department}</option>
               ))}
-            </div>
+            </select>
           )}
         </section>
 

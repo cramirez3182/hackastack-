@@ -43,7 +43,6 @@ async def get_professors(
     min_would_take_again: float = 0.0,
     tenure_track: Optional[bool] = None,
     course: Optional[str] = None,
-    tags: list[str] = FastAPIQuery(default=[]),
     search: Optional[str] = None,
     sort_by: str = "avg_rating",
     sort_dir: str = "desc",
@@ -90,10 +89,6 @@ async def get_professors(
     if search:
         conditions.append("(LOWER(full_name) LIKE ? OR LOWER(department) LIKE ?)")
         params.extend([f"%{search.lower()}%", f"%{search.lower()}%"])
-
-    for tag in tags:
-        conditions.append("LOWER(tags) LIKE ?")
-        params.append(f"%{tag.lower()}%")
 
     where_clause = ("WHERE " + " AND ".join(conditions)) if conditions else ""
 
@@ -147,19 +142,6 @@ async def get_departments():
         async with db.execute("SELECT DISTINCT department, school FROM professors ORDER BY school, department") as cursor:
             rows = await cursor.fetchall()
             return [{"department": r[0], "school": r[1]} for r in rows]
-
-
-@app.get("/api/tags")
-async def get_tags():
-    async with aiosqlite.connect(DB_PATH) as db:
-        async with db.execute("SELECT tags FROM professors WHERE tags != '[]'") as cursor:
-            rows = await cursor.fetchall()
-            tag_counts: dict[str, int] = {}
-            for row in rows:
-                for tag in json.loads(row[0]):
-                    tag_counts[tag] = tag_counts.get(tag, 0) + 1
-            sorted_tags = sorted(tag_counts.items(), key=lambda x: -x[1])
-            return [{"tag": t, "count": c} for t, c in sorted_tags[:50]]
 
 
 @app.post("/api/chat")

@@ -41,7 +41,6 @@ export interface Filters {
   minWouldTakeAgain: number
   tenureTrack: 'all' | 'yes' | 'no'
   course: string
-  tags: string[]
   sortBy: 'avg_rating' | 'avg_difficulty' | 'num_ratings' | 'would_take_again_percent' | 'last_name'
   sortDir: 'asc' | 'desc'
 }

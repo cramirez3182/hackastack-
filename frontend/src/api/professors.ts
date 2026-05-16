@@ -13,7 +13,6 @@ export async function fetchProfessors(filters: Filters): Promise<{ professors: P
   if (filters.minWouldTakeAgain > 0) params.set('min_would_take_again', String(filters.minWouldTakeAgain))
   if (filters.tenureTrack !== 'all') params.set('tenure_track', filters.tenureTrack === 'yes' ? 'true' : 'false')
   if (filters.course) params.set('course', filters.course)
-  filters.tags.forEach(tag => params.append('tags', tag))
   if (filters.hasSchedule && filters.hasSchedule !== 'all') params.set('has_schedule', filters.hasSchedule === 'yes' ? 'true' : 'false')
   params.set('sort_by', filters.sortBy)
   params.set('sort_dir', filters.sortDir)
@@ -32,12 +31,6 @@ export async function fetchProfessor(id: string): Promise<Professor> {
 
 export async function fetchDepartments(): Promise<{ department: string; school: string }[]> {
   const res = await fetch(`${BASE}/departments`)
-  if (!res.ok) return []
-  return res.json()
-}
-
-export async function fetchTags(): Promise<{ tag: string; count: number }[]> {
-  const res = await fetch(`${BASE}/tags`)
   if (!res.ok) return []
   return res.json()
 }

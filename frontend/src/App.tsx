@@ -24,7 +24,6 @@ const DEFAULT_FILTERS: Filters = {
   minWouldTakeAgain: 0,
   tenureTrack: 'all',
   course: '',
-  tags: [],
   sortBy: 'avg_rating',
   sortDir: 'desc',
 }
@@ -62,6 +61,11 @@ export default function App() {
     const idSet = new Set(favoriteIds)
     return allProfessors.filter(p => idSet.has(p.id))
   }, [allProfessors, showFavoritesOnly, favoriteIds])
+
+  const savedProfessors = useMemo(() => {
+    const idSet = new Set(favoriteIds)
+    return allProfessors.filter(p => idSet.has(p.id))
+  }, [allProfessors, favoriteIds])
 
   const previewCount = useMemo(() => professors.length, [professors])
 
@@ -248,7 +252,7 @@ export default function App() {
             <div
               ref={scrollRef}
               onScroll={e => setShowScrollTop((e.currentTarget.scrollTop > 300))}
-              className="flex-1 min-h-0 overflow-y-auto overscroll-contain pb-28"
+              className="flex-1 min-h-0 overflow-y-auto overscroll-contain pb-18"
             >
               {view === 'grid' ? (
                 <GridView
@@ -261,7 +265,7 @@ export default function App() {
                   onFavoriteToggle={toggleFavorite}
                 />
               ) : (
-                <CalendarGrid professors={professors} savedSlots={savedSlots} onSelect={setSelectedProf} />
+                <CalendarGrid professors={savedProfessors} savedSlots={savedSlots} onSelect={setSelectedProf} />
               )}
             </div>
           )}
