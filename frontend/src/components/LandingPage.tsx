@@ -1,4 +1,4 @@
-import { useState, useEffect, type ReactNode } from 'react'
+import { useState, useEffect, useRef, type ReactNode } from 'react'
 import {
   GraduationCap, Star, SlidersHorizontal, Mic, GitCompare,
   BookOpen, Award, ChevronRight, Sparkles, Search,
@@ -76,11 +76,14 @@ const HOW_IT_WORKS = [
 export function LandingPage({ onEnter }: Props) {
   const [scrolled, setScrolled] = useState(false)
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false)
+  const scrollRef = useRef<HTMLDivElement>(null)
 
   useEffect(() => {
-    const onScroll = () => setScrolled(window.scrollY > 40)
-    window.addEventListener('scroll', onScroll, { passive: true })
-    return () => window.removeEventListener('scroll', onScroll)
+    const el = scrollRef.current
+    if (!el) return
+    const onScroll = () => setScrolled(el.scrollTop > 40)
+    el.addEventListener('scroll', onScroll, { passive: true })
+    return () => el.removeEventListener('scroll', onScroll)
   }, [])
 
   const scrollTo = (id: string) => {
@@ -89,7 +92,7 @@ export function LandingPage({ onEnter }: Props) {
   }
 
   return (
-    <div className="min-h-screen bg-white overflow-y-auto">
+    <div ref={scrollRef} className="h-full min-h-0 overflow-y-auto overscroll-contain bg-white">
 
       {/* ── STICKY NAV ─────────────────────────────────────────── */}
       <nav
