@@ -140,7 +140,7 @@ interface GridViewProps {
   onCompareToggle?: (prof: Professor) => void
   isComparing?: (id: string) => boolean
   isFavorite?: (id: string) => boolean
-  onFavoriteToggle?: (id: string) => void
+  onFavoriteToggle?: (prof: Professor) => void
 }
 
 export function GridView({
@@ -173,7 +173,7 @@ export function GridView({
           onCompareToggle={onCompareToggle}
           isComparing={isComparing?.(prof.id)}
           isFavorite={isFavorite?.(prof.id)}
-          onFavoriteToggle={onFavoriteToggle ? () => onFavoriteToggle(prof.id) : undefined}
+          onFavoriteToggle={onFavoriteToggle ? () => onFavoriteToggle(prof) : undefined}
         />
       ))}
     </div>

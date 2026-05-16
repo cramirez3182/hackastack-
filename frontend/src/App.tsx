@@ -42,7 +42,7 @@ export default function App() {
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false)
   const [showScrollTop, setShowScrollTop] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
-  const { favoriteIds, toggle: toggleFavorite, isFavorite } = useFavorites()
+  const { favoriteIds, favoriteNames, toggle: toggleFavorite, isFavorite } = useFavorites()
 
 
   useEffect(() => {
@@ -56,8 +56,10 @@ export default function App() {
 
   const professors = useMemo(() => {
     if (!showFavoritesOnly) return allProfessors
-    return allProfessors.filter(p => favoriteIds.includes(p.id))
-  }, [allProfessors, showFavoritesOnly, favoriteIds])
+    return allProfessors.filter(
+      p => favoriteIds.includes(p.id) || favoriteNames.includes(p.full_name),
+    )
+  }, [allProfessors, showFavoritesOnly, favoriteIds, favoriteNames])
 
   const previewCount = useMemo(() => professors.length, [professors])
 
@@ -90,6 +92,18 @@ export default function App() {
   }, [])
 
   const isComparing = useCallback((id: string) => compareList.some(p => p.id === id), [compareList])
+
+  const toggleSavedOnly = useCallback(() => {
+    setShowFavoritesOnly(prev => {
+      const next = !prev
+      if (next) {
+        setActivePresetId(null)
+        setFilters(DEFAULT_FILTERS)
+        setSearchInput('')
+      }
+      return next
+    })
+  }, [])
 
   const addTagFilter = useCallback((tag: string) => {
     setFilters(prev => ({
@@ -210,7 +224,7 @@ export default function App() {
             filters={filters}
             onChange={updateFilters}
             showFavoritesOnly={showFavoritesOnly}
-            onToggleFavorites={() => setShowFavoritesOnly(v => !v)}
+            onToggleFavorites={toggleSavedOnly}
           />
 
           {isBackendDown && (
@@ -272,7 +286,10 @@ export default function App() {
         onCompareToggle={toggleCompare}
         isComparing={selectedProf ? isComparing(selectedProf.id) : false}
         isFavorite={selectedProf ? isFavorite(selectedProf.id) : false}
-        onFavoriteToggle={() => selectedProf && toggleFavorite(selectedProf.id)}
+        onFavoriteToggle={() =>
+          selectedProf &&
+          toggleFavorite({ id: selectedProf.id, full_name: selectedProf.full_name })
+        }
       />
 
       <CompareDrawer
