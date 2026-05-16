@@ -7,7 +7,7 @@ import { useFavorites } from './hooks/useFavorites'
 import { FilterPanel } from './components/FilterPanel'
 import { CalendarGrid, GridView } from './components/CalendarGrid'
 import { ProfessorModal } from './components/ProfessorModal'
-import { VoiceChat, VoiceChatButton } from './components/VoiceChat'
+import { TencentVoiceChat as VoiceChat, VoiceChatButton } from './components/TencentVoiceChat'
 import { ProfessorFinderWizard } from './components/ProfessorFinderWizard'
 import { QuickFilters, type QuickPreset } from './components/QuickFilters'
 import { ActiveFilterPills } from './components/ActiveFilterPills'
@@ -127,7 +127,7 @@ export default function App() {
             <GraduationCap size={18} className="text-white" />
           </div>
           <div>
-            <h1 className="text-base font-bold text-gray-900 leading-none">SCU Professor Finder</h1>
+            <h1 className="text-base font-bold text-gray-900 leading-none">SCU Course Optimizer</h1>
             <p className="text-xs text-gray-400 leading-none mt-0.5">Santa Clara University</p>
           </div>
         </div>
