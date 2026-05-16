@@ -50,11 +50,12 @@ export function FilterPanel({ filters, searchInput, onSearchInputChange, onChang
     filters.search || filters.department || filters.school ||
     filters.minRating > 0 || filters.maxDifficulty < 5 ||
     filters.minWouldTakeAgain > 0 || filters.tenureTrack !== 'all' ||
+    filters.hasSchedule !== 'all' ||
     filters.course || filters.tags.length > 0
 
   const resetAll = () => onChange({
     search: '', department: '', school: '', minRating: 0, maxDifficulty: 5,
-    minWouldTakeAgain: 0, tenureTrack: 'all', course: '', tags: [],
+    minWouldTakeAgain: 0, tenureTrack: 'all', hasSchedule: 'yes', course: '', tags: [],
   })
 
   const toggleTag = (tag: string) => {
@@ -147,6 +148,28 @@ export function FilterPanel({ filters, searchInput, onSearchInputChange, onChang
                 onClick={() => onChange({ tenureTrack: opt })}
                 className={`flex-1 py-1.5 text-xs rounded-lg border font-medium transition-colors ${
                   filters.tenureTrack === opt
+                    ? 'bg-blue-600 border-blue-600 text-white'
+                    : 'border-gray-200 text-gray-600 hover:border-blue-400'
+                }`}
+              >
+                {opt === 'all' ? 'All' : opt === 'yes' ? 'Yes' : 'No'}
+              </button>
+            ))}
+          </div>
+        </section>
+
+        <hr className="border-gray-100" />
+
+        {/* Has Schedule */}
+        <section>
+          <p className="text-sm font-semibold text-gray-700 mb-2">Has Schedule</p>
+          <div className="flex gap-2">
+            {(['all', 'yes', 'no'] as const).map(opt => (
+              <button
+                key={opt}
+                onClick={() => onChange({ hasSchedule: opt })}
+                className={`flex-1 py-1.5 text-xs rounded-lg border font-medium transition-colors ${
+                  filters.hasSchedule === opt
                     ? 'bg-blue-600 border-blue-600 text-white'
                     : 'border-gray-200 text-gray-600 hover:border-blue-400'
                 }`}

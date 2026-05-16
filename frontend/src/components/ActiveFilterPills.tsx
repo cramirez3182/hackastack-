@@ -19,6 +19,8 @@ export function ActiveFilterPills({ filters, onChange, showFavoritesOnly, onTogg
   if (filters.minWouldTakeAgain > 0) pills.push({ label: `${filters.minWouldTakeAgain}%+ take again`, clear: () => onChange({ minWouldTakeAgain: 0 }) })
   if (filters.tenureTrack === 'yes') pills.push({ label: 'Tenure track', clear: () => onChange({ tenureTrack: 'all' }) })
   if (filters.tenureTrack === 'no') pills.push({ label: 'Non-tenure', clear: () => onChange({ tenureTrack: 'all' }) })
+  if (filters.hasSchedule === 'yes') pills.push({ label: 'Has schedule', clear: () => onChange({ hasSchedule: 'all' }) })
+  if (filters.hasSchedule === 'no') pills.push({ label: 'No schedule', clear: () => onChange({ hasSchedule: 'all' }) })
   if (filters.course) pills.push({ label: filters.course, clear: () => onChange({ course: '' }) })
   filters.tags.forEach(tag => {
     pills.push({
@@ -64,12 +66,13 @@ export function ActiveFilterPills({ filters, onChange, showFavoritesOnly, onTogg
               search: '',
               department: '',
               school: '',
-              minRating: 0,
-              maxDifficulty: 5,
-              minWouldTakeAgain: 0,
-              tenureTrack: 'all',
-              course: '',
-              tags: [],
+            minRating: 0,
+            maxDifficulty: 5,
+            minWouldTakeAgain: 0,
+            tenureTrack: 'all',
+            hasSchedule: 'yes',
+            course: '',
+            tags: [],
             })
           }
           className="text-xs text-gray-400 hover:text-red-500 ml-1"

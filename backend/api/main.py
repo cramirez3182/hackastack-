@@ -49,6 +49,7 @@ async def get_professors(
     sort_dir: str = "desc",
     limit: int = 500,
     offset: int = 0,
+    has_schedule: Optional[bool] = None,
 ):
     conditions = []
     params = []
@@ -80,6 +81,11 @@ async def get_professors(
     if course:
         conditions.append("LOWER(courses_taught) LIKE ?")
         params.append(f"%{course.lower()}%")
+
+    if has_schedule is True:
+        conditions.append("schedule != '[]'")
+    elif has_schedule is False:
+        conditions.append("schedule = '[]'")
 
     if search:
         conditions.append("(LOWER(full_name) LIKE ? OR LOWER(department) LIKE ?)")

@@ -35,6 +35,7 @@ export interface Filters {
   search: string
   department: string
   school: string
+  hasSchedule: 'all' | 'yes' | 'no'
   minRating: number
   maxDifficulty: number
   minWouldTakeAgain: number
@@ -48,6 +49,18 @@ export interface Filters {
 export interface ChatMessage {
   role: 'user' | 'assistant'
   content: string
+}
+
+export interface SavedSlot {
+  id: string
+  professor_id: string
+  professor_name: string
+  day: 'Monday' | 'Tuesday' | 'Wednesday' | 'Thursday' | 'Friday'
+  start_time: string
+  end_time: string
+  course_code: string
+  course_name: string
+  room?: string
 }
 
 export const SCHOOL_COLORS: Record<string, string> = {

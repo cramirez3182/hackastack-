@@ -1,8 +1,10 @@
-import { X, Mail, ExternalLink, Award, BookOpen, Star, AlertCircle, GitCompare, Clock } from 'lucide-react'
+import { X, Mail, ExternalLink, Award, BookOpen, Star, AlertCircle, GitCompare, Clock, Plus, Check, Trash } from 'lucide-react'
 import type { Professor } from '../types/professor'
+import type { SavedSlot } from '../types/professor'
 import { groupSchedule, formatTime12h } from '../utils/schedule'
 import { SCHOOL_COLORS, SCHOOL_TEXT_COLORS } from '../types/professor'
 import { StarRating, RatingBar } from './RatingBar'
+import { useSavedSlots } from '../hooks/useSavedSlots'
 
 interface Props {
   professor: Professor | null
@@ -29,6 +31,7 @@ export function ProfessorModal({
 
   const dotColor = SCHOOL_COLORS[p.school] ?? 'bg-gray-400'
   const textColor = SCHOOL_TEXT_COLORS[p.school] ?? 'text-gray-600'
+  const { slots: savedSlots, addSlots, removeById, isSaved } = useSavedSlots()
 
   return (
     <div
@@ -205,19 +208,57 @@ export function ProfessorModal({
                 <Clock size={14} /> Schedule
               </h3>
               <div className="space-y-1.5">
-                {groupSchedule(p.schedule).map((slot, i) => (
-                  <div key={i} className="flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-2 text-sm flex-wrap">
-                    <span className="font-bold text-blue-700 text-xs bg-blue-100 px-2 py-0.5 rounded-md flex-shrink-0">
-                      {slot.dayPattern}
-                    </span>
-                    <span className="text-gray-500 text-xs flex-shrink-0">
-                      {formatTime12h(slot.start_time)}–{formatTime12h(slot.end_time)}
-                    </span>
-                    <span className="font-mono text-gray-800 text-xs font-semibold flex-shrink-0">{slot.course_code}</span>
-                    <span className="text-gray-500 text-xs truncate">{slot.course_name}</span>
-                    {slot.room && <span className="text-gray-400 text-xs ml-auto flex-shrink-0">{slot.room}</span>}
-                  </div>
-                ))}
+                {groupSchedule(p.schedule).map((slot, i) => {
+                  // find underlying per-day slots that match this grouped slot
+                  const underlying = p.schedule.filter(s => s.course_code === slot.course_code && s.start_time === slot.start_time && s.end_time === slot.end_time && s.course_name === slot.course_name)
+                  const saveIds: string[] = underlying.map(s => `${p.id}|${s.day}|${s.start_time}|${s.end_time}|${s.course_code}`)
+
+                  const allSaved = saveIds.every(id => isSaved(id))
+
+                  const handleSave = () => {
+                    const toAdd: SavedSlot[] = underlying.map(s => ({
+                      id: `${p.id}|${s.day}|${s.start_time}|${s.end_time}|${s.course_code}`,
+                      professor_id: p.id,
+                      professor_name: p.full_name,
+                      day: s.day as SavedSlot['day'],
+                      start_time: s.start_time,
+                      end_time: s.end_time,
+                      course_code: s.course_code,
+                      course_name: s.course_name,
+                      room: s.room,
+                    }))
+                    addSlots(toAdd)
+                  }
+
+                  const handleRemove = () => {
+                    for (const id of saveIds) removeById(id)
+                  }
+
+                  return (
+                    <div key={i} className="flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-2 text-sm flex-wrap">
+                      <span className="font-bold text-blue-700 text-xs bg-blue-100 px-2 py-0.5 rounded-md flex-shrink-0">
+                        {slot.dayPattern}
+                      </span>
+                      <span className="text-gray-500 text-xs flex-shrink-0">
+                        {formatTime12h(slot.start_time)}–{formatTime12h(slot.end_time)}
+                      </span>
+                      <span className="font-mono text-gray-800 text-xs font-semibold flex-shrink-0">{slot.course_code}</span>
+                      <span className="text-gray-500 text-xs truncate">{slot.course_name}</span>
+                      {slot.room && <span className="text-gray-400 text-xs ml-auto flex-shrink-0">{slot.room}</span>}
+                      <div className="ml-2 flex items-center gap-1">
+                        {!allSaved ? (
+                          <button onClick={handleSave} className="text-xs px-2 py-1 rounded-md bg-indigo-600 text-white flex items-center gap-1">
+                            <Plus size={12} /> Save
+                          </button>
+                        ) : (
+                          <button onClick={handleRemove} className="text-xs px-2 py-1 rounded-md bg-gray-200 text-gray-700 flex items-center gap-1">
+                            <Check size={12} /> Saved
+                          </button>
+                        )}
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
             </section>
           )}

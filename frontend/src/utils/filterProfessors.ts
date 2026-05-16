@@ -49,6 +49,12 @@ export function filterProfessors(professors: Professor[], filters: Filters): Pro
     )
   }
 
+  if ((filters as any).hasSchedule === 'yes') {
+    result = result.filter(p => (p.schedule?.length ?? 0) > 0)
+  } else if ((filters as any).hasSchedule === 'no') {
+    result = result.filter(p => (p.schedule?.length ?? 0) === 0)
+  }
+
   for (const tag of filters.tags) {
     const t = tag.toLowerCase()
     result = result.filter(p => p.tags.some(pt => pt.toLowerCase().includes(t)))

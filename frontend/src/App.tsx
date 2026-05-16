@@ -12,11 +12,13 @@ import { ProfessorFinderWizard } from './components/ProfessorFinderWizard'
 import { QuickFilters, type QuickPreset } from './components/QuickFilters'
 import { ActiveFilterPills } from './components/ActiveFilterPills'
 import { CompareDrawer } from './components/CompareDrawer'
+import { useSavedSlots } from './hooks/useSavedSlots'
 
 const DEFAULT_FILTERS: Filters = {
   search: '',
   department: '',
   school: '',
+  hasSchedule: 'yes',
   minRating: 0,
   maxDifficulty: 5,
   minWouldTakeAgain: 0,
@@ -43,6 +45,7 @@ export default function App() {
   const [showScrollTop, setShowScrollTop] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
   const { favoriteIds, toggle: toggleFavorite, isFavorite } = useFavorites()
+  const { slots: savedSlots } = useSavedSlots()
 
 
   useEffect(() => {
@@ -258,7 +261,7 @@ export default function App() {
                   onFavoriteToggle={toggleFavorite}
                 />
               ) : (
-                <CalendarGrid professors={professors} onSelect={setSelectedProf} />
+                <CalendarGrid professors={professors} savedSlots={savedSlots} onSelect={setSelectedProf} />
               )}
             </div>
           )}

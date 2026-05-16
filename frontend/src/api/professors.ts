@@ -14,6 +14,7 @@ export async function fetchProfessors(filters: Filters): Promise<{ professors: P
   if (filters.tenureTrack !== 'all') params.set('tenure_track', filters.tenureTrack === 'yes' ? 'true' : 'false')
   if (filters.course) params.set('course', filters.course)
   filters.tags.forEach(tag => params.append('tags', tag))
+  if (filters.hasSchedule && filters.hasSchedule !== 'all') params.set('has_schedule', filters.hasSchedule === 'yes' ? 'true' : 'false')
   params.set('sort_by', filters.sortBy)
   params.set('sort_dir', filters.sortDir)
   params.set('limit', '500')
