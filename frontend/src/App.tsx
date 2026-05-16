@@ -111,12 +111,8 @@ export default function App() {
     })
   }, [])
 
-  const addTagFilter = useCallback((tag: string) => {
-    setFilters(prev => ({
-      ...prev,
-      tags: prev.tags.includes(tag) ? prev.tags : [...prev.tags, tag],
-    }))
-    setActivePresetId(null)
+  const addTagFilter = useCallback((_tag: string) => {
+    // tags filter removed from Filters type
   }, [])
 
   const addCourseFilter = useCallback((course: string) => {
