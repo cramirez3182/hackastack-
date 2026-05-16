@@ -18,7 +18,13 @@ export const DEMO_PROFESSORS: Professor[] = [
     would_take_again_percent: 92,
     tags: ['Amazing lectures', 'Caring', 'Clear grading criteria'],
     courses_taught: ['COEN 12', 'COEN 79', 'COEN 179'],
-    schedule: [],
+    schedule: [
+      { day: 'Monday', start_time: '09:00', end_time: '10:15', course_code: 'COEN 12', course_name: 'Advanced Programming', room: 'Heafey 241' },
+      { day: 'Wednesday', start_time: '09:00', end_time: '10:15', course_code: 'COEN 12', course_name: 'Advanced Programming', room: 'Heafey 241' },
+      { day: 'Friday', start_time: '09:00', end_time: '10:15', course_code: 'COEN 12', course_name: 'Advanced Programming', room: 'Heafey 241' },
+      { day: 'Tuesday', start_time: '14:00', end_time: '15:45', course_code: 'COEN 79', course_name: 'Operating Systems', room: 'Heafey 143' },
+      { day: 'Thursday', start_time: '14:00', end_time: '15:45', course_code: 'COEN 79', course_name: 'Operating Systems', room: 'Heafey 143' },
+    ],
   },
   {
     id: 'demo-2',
@@ -35,7 +41,11 @@ export const DEMO_PROFESSORS: Professor[] = [
     would_take_again_percent: 71,
     tags: ['Tough grader', 'Good lectures', 'Lots of homework'],
     courses_taught: ['MATH 11', 'MATH 12', 'MATH 51'],
-    schedule: [],
+    schedule: [
+      { day: 'Monday', start_time: '10:30', end_time: '11:45', course_code: 'MATH 51', course_name: 'Multivariable Calculus', room: 'Daly 206' },
+      { day: 'Wednesday', start_time: '10:30', end_time: '11:45', course_code: 'MATH 51', course_name: 'Multivariable Calculus', room: 'Daly 206' },
+      { day: 'Friday', start_time: '10:30', end_time: '11:45', course_code: 'MATH 51', course_name: 'Multivariable Calculus', room: 'Daly 206' },
+    ],
   },
   {
     id: 'demo-3',

@@ -1,5 +1,6 @@
 import { X, GitCompare } from 'lucide-react'
 import type { Professor } from '../types/professor'
+import { groupSchedule, formatTimeRange } from '../utils/schedule'
 import { StarRating, RatingBar } from './RatingBar'
 
 interface Props {
@@ -35,6 +36,18 @@ export function CompareDrawer({ professors, onRemove, onClear, onSelect }: Props
                   </div>
                 ) : (
                   <p className="text-xs text-gray-400 italic">No RMP data</p>
+                )}
+                {groupSchedule(p.schedule).length > 0 && (
+                  <div className="mt-2 pt-2 border-t border-gray-200 space-y-1">
+                    {groupSchedule(p.schedule).slice(0, 2).map((slot, i) => (
+                      <p key={i} className="text-[10px] text-gray-600 leading-snug">
+                        <span className="font-mono font-semibold">{slot.course_code}</span>
+                        {slot.course_name && <span> · {slot.course_name}</span>}
+                        <br />
+                        <span className="text-gray-500">{slot.dayPattern} {formatTimeRange(slot.start_time, slot.end_time)}</span>
+                      </p>
+                    ))}
+                  </div>
                 )}
               </button>
             </div>

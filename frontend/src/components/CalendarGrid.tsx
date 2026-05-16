@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import type { Professor } from '../types/professor'
 import { SCHOOL_COLORS } from '../types/professor'
+import { formatTimeRange } from '../utils/schedule'
 import { ProfessorCard } from './ProfessorCard'
 
 const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday'] as const
@@ -97,17 +98,28 @@ export function CalendarGrid({ professors, onSelect }: Props) {
                 >
                   {cellProfs.map(prof => {
                     const dotColor = SCHOOL_COLORS[prof.school] ?? 'bg-gray-400'
+                    const slot = prof.schedule.find(s => {
+                      if (s.day !== day) return false
+                      const start = parseTime(s.start_time)
+                      const end = parseTime(s.end_time)
+                      return hour >= Math.floor(start) && hour < Math.ceil(end)
+                    })
+                    const tooltip = slot
+                      ? `${prof.full_name} — ${slot.course_code} ${slot.course_name} (${slot.day} ${formatTimeRange(slot.start_time, slot.end_time)})`
+                      : `${prof.full_name} — ${prof.department}`
                     return (
                       <button
                         key={prof.id}
                         onClick={() => onSelect(prof)}
                         className={`w-full text-left mb-1 rounded px-1.5 py-1 text-xs font-medium text-white ${dotColor} hover:opacity-90 transition-opacity shadow-sm`}
-                        title={`${prof.full_name} — ${prof.department}`}
+                        title={tooltip}
                       >
                         <div className="truncate">{prof.last_name}</div>
-                        {prof.avg_rating > 0 && (
+                        {slot ? (
+                          <div className="opacity-90 text-[10px] truncate font-normal">{slot.course_code}</div>
+                        ) : prof.avg_rating > 0 ? (
                           <div className="opacity-80 text-[10px]">{prof.avg_rating.toFixed(1)}★</div>
-                        )}
+                        ) : null}
                       </button>
                     )
                   })}

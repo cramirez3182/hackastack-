@@ -1,6 +1,7 @@
-import { User, BookOpen, Award, TrendingUp, Star, GitCompare } from 'lucide-react'
+import { User, BookOpen, Award, TrendingUp, Star, GitCompare, Clock } from 'lucide-react'
 import type { Professor } from '../types/professor'
 import { SCHOOL_BG_COLORS, SCHOOL_TEXT_COLORS, SCHOOL_COLORS } from '../types/professor'
+import { groupSchedule, formatTimeRange } from '../utils/schedule'
 import { StarRating, RatingBar } from './RatingBar'
 
 interface Props {
@@ -27,6 +28,7 @@ export function ProfessorCard({
   const bgColor = SCHOOL_BG_COLORS[p.school] ?? 'bg-gray-50 border-gray-200'
   const textColor = SCHOOL_TEXT_COLORS[p.school] ?? 'text-gray-700'
   const dotColor = SCHOOL_COLORS[p.school] ?? 'bg-gray-400'
+  const teachingSlots = groupSchedule(p.schedule)
 
   if (compact) {
     return (
@@ -179,8 +181,33 @@ export function ProfessorCard({
           </div>
         )}
 
-        {/* Courses */}
-        {p.courses_taught.length > 0 && (
+        {/* Current courses + meeting times */}
+        {teachingSlots.length > 0 ? (
+          <div className="mt-2 space-y-1.5 pt-2 border-t border-gray-100/80">
+            <div className="flex items-center gap-1.5 text-gray-500">
+              <Clock size={11} className="flex-shrink-0" />
+              <span className="text-[10px] font-semibold uppercase tracking-wide">Teaching this term</span>
+            </div>
+            {teachingSlots.slice(0, 2).map((slot, i) => (
+              <div key={i} className="rounded-lg bg-white/70 border border-gray-100 px-2 py-1.5 text-xs">
+                <div className="font-semibold text-gray-800 truncate">
+                  <span className="font-mono">{slot.course_code}</span>
+                  {slot.course_name && (
+                    <span className="font-sans text-gray-600 font-normal"> · {slot.course_name}</span>
+                  )}
+                </div>
+                <div className="text-gray-500 mt-0.5 truncate">
+                  <span className="font-medium text-blue-700">{slot.dayPattern}</span>
+                  {' '}{formatTimeRange(slot.start_time, slot.end_time)}
+                  {slot.room && <span className="text-gray-400"> · {slot.room}</span>}
+                </div>
+              </div>
+            ))}
+            {teachingSlots.length > 2 && (
+              <p className="text-[10px] text-gray-400">+{teachingSlots.length - 2} more section{teachingSlots.length - 2 > 1 ? 's' : ''}</p>
+            )}
+          </div>
+        ) : p.courses_taught.length > 0 ? (
           <div className="mt-2 flex items-center gap-1.5 pt-2 border-t border-gray-100/80">
             <BookOpen size={11} className="text-gray-400 flex-shrink-0" />
             <p className="text-xs text-gray-500 truncate">
@@ -188,7 +215,7 @@ export function ProfessorCard({
               {p.courses_taught.length > 3 && <span className="text-gray-400"> +{p.courses_taught.length - 3}</span>}
             </p>
           </div>
-        )}
+        ) : null}
       </button>
     </div>
   )

@@ -1,36 +1,6 @@
 import { X, Mail, ExternalLink, Award, BookOpen, Star, AlertCircle, GitCompare, Clock } from 'lucide-react'
-import type { TimeSlot } from '../types/professor'
-
-// ── Schedule helpers ───────────────────────────────────────────
-const DAY_ORDER = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-const DAY_ABBR: Record<string, string> = { Monday: 'M', Tuesday: 'T', Wednesday: 'W', Thursday: 'R', Friday: 'F', Saturday: 'Sa', Sunday: 'Su' }
-const PATTERN_ALIAS: Record<string, string> = { MWF: 'MWF', TR: 'TR', MW: 'MW', MTWRF: 'Daily' }
-
-function getDayPattern(days: string[]): string {
-  const sorted = [...days].sort((a, b) => DAY_ORDER.indexOf(a) - DAY_ORDER.indexOf(b))
-  const abbr = sorted.map(d => DAY_ABBR[d] ?? d[0]).join('')
-  return PATTERN_ALIAS[abbr] ?? abbr
-}
-
-function groupSchedule(schedule: TimeSlot[]) {
-  const map = new Map<string, { days: string[]; slot: TimeSlot }>()
-  for (const slot of schedule) {
-    const key = `${slot.course_code}|${slot.start_time}|${slot.end_time}`
-    if (!map.has(key)) map.set(key, { days: [], slot })
-    map.get(key)!.days.push(slot.day)
-  }
-  return [...map.values()].map(({ days, slot }) => ({
-    ...slot,
-    dayPattern: getDayPattern(days),
-  }))
-}
-
-function fmt12h(t: string): string {
-  const [hStr, m] = t.split(':')
-  const h = parseInt(hStr, 10)
-  return `${h > 12 ? h - 12 : h || 12}:${m} ${h < 12 ? 'AM' : 'PM'}`
-}
 import type { Professor } from '../types/professor'
+import { groupSchedule, formatTime12h } from '../utils/schedule'
 import { SCHOOL_COLORS, SCHOOL_TEXT_COLORS } from '../types/professor'
 import { StarRating, RatingBar } from './RatingBar'
 
@@ -241,7 +211,7 @@ export function ProfessorModal({
                       {slot.dayPattern}
                     </span>
                     <span className="text-gray-500 text-xs flex-shrink-0">
-                      {fmt12h(slot.start_time)}–{fmt12h(slot.end_time)}
+                      {formatTime12h(slot.start_time)}–{formatTime12h(slot.end_time)}
                     </span>
                     <span className="font-mono text-gray-800 text-xs font-semibold flex-shrink-0">{slot.course_code}</span>
                     <span className="text-gray-500 text-xs truncate">{slot.course_name}</span>
