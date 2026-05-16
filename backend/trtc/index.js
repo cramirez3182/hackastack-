@@ -6,8 +6,17 @@
 require('dotenv').config()
 const express = require('express')
 const tencentcloud = require('tencentcloud-sdk-nodejs-trtc')
+const TLSSigAPIv2 = require('tls-sig-api-v2')
 
 const TrtcClient = tencentcloud.trtc.v20190722.Client
+
+const SDK_APP_ID = parseInt(process.env.TRTC_SDK_APP_ID || '0', 10)
+const SECRET_KEY = process.env.TENCENT_SECRET_KEY || ''
+const sigApi = new TLSSigAPIv2.Api(SDK_APP_ID, SECRET_KEY)
+
+function genUserSig(userId) {
+  return sigApi.genSig(userId, 86400 * 7) // 7-day sig
+}
 
 const client = new TrtcClient({
   credential: {
@@ -23,8 +32,8 @@ function buildChatConfig() {
   return {
     SdkAppId: parseInt(process.env.TRTC_SDK_APP_ID || '0', 10),
     AgentConfig: {
-      UserId: process.env.TRTC_ROBOT_USER_ID || 'robot_id',
-      UserSig: process.env.TRTC_ROBOT_USER_SIG || '',
+      UserId: process.env.TRTC_ROBOT_USER_ID || 'scu-robot',
+      UserSig: genUserSig(process.env.TRTC_ROBOT_USER_ID || 'scu-robot'),
       TargetUserId: process.env.TRTC_USER_ID || '',
       WelcomeMessage: process.env.TRTC_WELCOME_MESSAGE ||
         'Hi! I\'m your SCU Course Optimizer advisor. Ask me anything about professors — who\'s the easiest, who teaches a specific course, or who students love most.',
@@ -70,12 +79,13 @@ app.use((req, res, next) => {
 
 // Returns only the client-side config needed to join the TRTC room
 app.get('/trtc-client-config', (req, res) => {
-  const cfg = buildChatConfig()
+  const userId = process.env.TRTC_USER_ID || 'scu-user'
+  const robotId = process.env.TRTC_ROBOT_USER_ID || 'scu-robot'
   res.json({
-    sdkAppId: cfg.SdkAppId,
-    userId: process.env.TRTC_USER_ID || '',
-    userSig: process.env.TRTC_USER_SIG || '',
-    robotId: cfg.AgentConfig.UserId,
+    sdkAppId: SDK_APP_ID,
+    userId,
+    userSig: genUserSig(userId),
+    robotId,
   })
 })
 
