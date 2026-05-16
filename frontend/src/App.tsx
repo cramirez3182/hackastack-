@@ -42,6 +42,7 @@ export default function App() {
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false)
   const { favoriteIds, toggle: toggleFavorite, isFavorite } = useFavorites()
 
+
   useEffect(() => {
     setFilters(prev => (prev.search === debouncedSearch ? prev : { ...prev, search: debouncedSearch }))
   }, [debouncedSearch])

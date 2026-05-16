@@ -44,20 +44,15 @@ export async function fetchTags(): Promise<{ tag: string; count: number }[]> {
 export async function sendChatMessage(
   message: string,
   history: ChatMessage[],
-  activeFilters: Partial<Filters>,
-  visibleProfessorIds: string[],
+  filters: Partial<Filters>,
+  professors: Professor[],
 ): Promise<string> {
-  const res = await fetch(`${BASE}/chat`, {
+  const res = await fetch('/api/chat', {
     method: 'POST',
     headers: { 'Content-Type': 'application/json' },
-    body: JSON.stringify({
-      message,
-      history,
-      active_filters: activeFilters,
-      visible_professor_ids: visibleProfessorIds,
-    }),
+    body: JSON.stringify({ message, history, professors, filters }),
   })
-  if (!res.ok) throw new Error('Chat request failed')
   const data = await res.json()
+  if (!res.ok) throw new Error(data.error ?? 'Chat request failed')
   return data.reply
 }
