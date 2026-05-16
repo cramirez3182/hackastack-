@@ -45,7 +45,7 @@ export default function App() {
   const [showScrollTop, setShowScrollTop] = useState(false)
   const scrollRef = useRef<HTMLDivElement>(null)
   const { favoriteIds, toggle: toggleFavorite, isFavorite } = useFavorites()
-  const { slots: savedSlots } = useSavedSlots()
+  const { slots: savedSlots, addSlots, removeById, isSaved } = useSavedSlots()
 
 
   useEffect(() => {
@@ -292,6 +292,9 @@ export default function App() {
           selectedProf &&
           toggleFavorite({ id: selectedProf.id, full_name: selectedProf.full_name })
         }
+        onSaveSlots={addSlots}
+        onRemoveSlot={removeById}
+        isSavedSlot={isSaved}
       />
 
       <CompareDrawer

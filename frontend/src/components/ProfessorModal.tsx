@@ -1,10 +1,8 @@
 import { X, Mail, ExternalLink, Award, BookOpen, Star, AlertCircle, GitCompare, Clock, Plus, Check, Trash } from 'lucide-react'
-import type { Professor } from '../types/professor'
-import type { SavedSlot } from '../types/professor'
+import type { Professor, SavedSlot } from '../types/professor'
 import { groupSchedule, formatTime12h } from '../utils/schedule'
 import { SCHOOL_COLORS, SCHOOL_TEXT_COLORS } from '../types/professor'
 import { StarRating, RatingBar } from './RatingBar'
-import { useSavedSlots } from '../hooks/useSavedSlots'
 
 interface Props {
   professor: Professor | null
@@ -15,6 +13,9 @@ interface Props {
   isComparing?: boolean
   isFavorite?: boolean
   onFavoriteToggle?: () => void
+  onSaveSlots?: (slots: SavedSlot[]) => void
+  onRemoveSlot?: (id: string) => void
+  isSavedSlot?: (id: string) => boolean
 }
 
 export function ProfessorModal({
@@ -26,12 +27,14 @@ export function ProfessorModal({
   isComparing = false,
   isFavorite = false,
   onFavoriteToggle,
+  onSaveSlots,
+  onRemoveSlot,
+  isSavedSlot,
 }: Props) {
   if (!p) return null
 
   const dotColor = SCHOOL_COLORS[p.school] ?? 'bg-gray-400'
   const textColor = SCHOOL_TEXT_COLORS[p.school] ?? 'text-gray-600'
-  const { slots: savedSlots, addSlots, removeById, isSaved } = useSavedSlots()
 
   return (
     <div
@@ -213,7 +216,7 @@ export function ProfessorModal({
                   const underlying = p.schedule.filter(s => s.course_code === slot.course_code && s.start_time === slot.start_time && s.end_time === slot.end_time && s.course_name === slot.course_name)
                   const saveIds: string[] = underlying.map(s => `${p.id}|${s.day}|${s.start_time}|${s.end_time}|${s.course_code}`)
 
-                  const allSaved = saveIds.every(id => isSaved(id))
+                  const allSaved = saveIds.every(id => isSavedSlot?.(id) ?? false)
 
                   const handleSave = () => {
                     const toAdd: SavedSlot[] = underlying.map(s => ({
@@ -227,11 +230,11 @@ export function ProfessorModal({
                       course_name: s.course_name,
                       room: s.room,
                     }))
-                    addSlots(toAdd)
+                    onSaveSlots?.(toAdd)
                   }
 
                   const handleRemove = () => {
-                    for (const id of saveIds) removeById(id)
+                    for (const id of saveIds) onRemoveSlot?.(id)
                   }
 
                   return (

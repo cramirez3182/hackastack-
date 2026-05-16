@@ -144,7 +144,7 @@ export function CalendarGrid({ professors, savedSlots, onSelect }: Props) {
                 <div
                   key={day}
                   className={`relative border-r border-gray-100 last:border-r-0 p-1 min-h-[80px] transition-colors overflow-visible ${
-                    isHovered ? 'bg-blue-50' : 'hover:bg-gray-50'
+                    isHovered ? 'bg-red-50' : 'hover:bg-gray-50'
                   }`}
                   onMouseEnter={() => setHoveredCell(cellKey)}
                   onMouseLeave={() => setHoveredCell(null)}
@@ -152,7 +152,7 @@ export function CalendarGrid({ professors, savedSlots, onSelect }: Props) {
                   {events.map(({ prof, slot }, idx) => {
                     const n = events.length
                     const isSaved = (prof as any).__saved || String(prof.id).startsWith('saved-')
-                    const dotColor = isSaved ? 'bg-blue-600' : (SCHOOL_COLORS[prof.school] ?? 'bg-gray-400')
+                    const dotColor = isSaved ? 'bg-red-600' : (SCHOOL_COLORS[prof.school] ?? 'bg-gray-400')
                     const start = parseTime(slot.start_time)
                     const end = parseTime(slot.end_time)
                     const startH = Math.floor(start)
