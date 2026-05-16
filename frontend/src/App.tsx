@@ -1,5 +1,5 @@
-import { useCallback, useEffect, useMemo, useState } from 'react'
-import { LayoutGrid, Calendar, RefreshCw, GraduationCap, Database, GitCompare } from 'lucide-react'
+import { useCallback, useEffect, useMemo, useRef, useState } from 'react'
+import { LayoutGrid, Calendar, RefreshCw, GraduationCap, Database, GitCompare, ChevronUp } from 'lucide-react'
 import type { Filters, Professor } from './types/professor'
 import { useProfessors } from './hooks/useProfessors'
 import { useDebouncedValue } from './hooks/useDebouncedValue'
@@ -40,6 +40,8 @@ export default function App() {
   const [compareList, setCompareList] = useState<Professor[]>([])
   const [activePresetId, setActivePresetId] = useState<string | null>(null)
   const [showFavoritesOnly, setShowFavoritesOnly] = useState(false)
+  const [showScrollTop, setShowScrollTop] = useState(false)
+  const scrollRef = useRef<HTMLDivElement>(null)
   const { favoriteIds, toggle: toggleFavorite, isFavorite } = useFavorites()
 
 
@@ -227,7 +229,11 @@ export default function App() {
           )}
 
           {(!isLoading || data) && (
-            <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain pb-28">
+            <div
+              ref={scrollRef}
+              onScroll={e => setShowScrollTop((e.currentTarget.scrollTop > 300))}
+              className="flex-1 min-h-0 overflow-y-auto overscroll-contain pb-28"
+            >
               {view === 'grid' ? (
                 <GridView
                   professors={professors}
@@ -245,6 +251,18 @@ export default function App() {
           )}
         </main>
       </div>
+
+      {/* Scroll-to-top button */}
+      {showScrollTop && (
+        <button
+          type="button"
+          onClick={() => scrollRef.current?.scrollTo({ top: 0, behavior: 'smooth' })}
+          className="fixed bottom-24 right-6 z-30 w-10 h-10 bg-white border border-gray-200 shadow-lg rounded-full flex items-center justify-center text-gray-500 hover:text-[#862633] hover:border-[#862633] transition-all hover:scale-110"
+          title="Back to top"
+        >
+          <ChevronUp size={18} />
+        </button>
+      )}
 
       <ProfessorModal
         professor={selectedProf}
