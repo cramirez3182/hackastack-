@@ -191,7 +191,7 @@ export function LandingPage({ onEnter }: Props) {
       <section className="relative min-h-screen flex flex-col items-center justify-center text-white overflow-hidden">
         {/* Campus background image */}
         <img
-          src="https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?auto=format&fit=crop&w=1920&q=80"
+          src="https://upload.wikimedia.org/wikipedia/commons/4/41/Santa_Clara_University_Library_1454_%28cropped%29.jpg"
           alt="Santa Clara University campus"
           className="absolute inset-0 w-full h-full object-cover"
         />
@@ -418,7 +418,7 @@ export function LandingPage({ onEnter }: Props) {
       {/* ── FINAL CTA ────────────────────────────────────────── */}
       <section className="relative overflow-hidden bg-gradient-to-br from-[#862633] via-[#7a2030] to-[#5c1a23] text-white py-24 text-center px-8">
         <img
-          src="https://images.unsplash.com/photo-1498243691581-b145c3f54a5a?auto=format&fit=crop&w=1920&q=80"
+          src="https://upload.wikimedia.org/wikipedia/commons/4/41/Santa_Clara_University_Library_1454_%28cropped%29.jpg"
           alt=""
           aria-hidden
           className="absolute inset-0 w-full h-full object-cover opacity-10"
