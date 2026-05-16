@@ -29,3 +29,4 @@ Thumbs.db
 
 # Cursor / agent worktrees
 .claude/
+backend/trtc/gen_usersig.js
