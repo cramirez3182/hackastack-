@@ -298,8 +298,8 @@ export function VoiceChatButton({ onClick, isOpen }: { onClick: () => void; isOp
         className="pointer-events-auto flex items-center gap-3 bg-gradient-to-r from-[#862633] to-[#5c1a23] text-white px-5 py-3 rounded-2xl shadow-2xl hover:shadow-[0_8px_30px_rgba(134,38,51,0.5)] hover:scale-105 transition-all duration-200 group"
       >
         {/* Pulse ring */}
-        <div className="relative flex-shrink-0">
-          <span className="absolute inset-0 rounded-full bg-white/30 animate-ping" />
+        <div className="relative w-9 h-9 flex-shrink-0">
+          <span className="absolute inset-0 rounded-full bg-white/40 animate-ping" />
           <div className="relative w-9 h-9 bg-white/20 rounded-full flex items-center justify-center">
             <Mic size={18} />
           </div>
