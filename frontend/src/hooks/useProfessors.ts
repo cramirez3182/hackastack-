@@ -9,7 +9,14 @@ export function useProfessors(filters: Filters) {
     queryKey: ['professors', filters],
     queryFn: async () => {
       try {
-        return await fetchProfessors(filters)
+        const result = await fetchProfessors(filters)
+        if (result.professors.length === 0 && !filters.search && !filters.department) {
+          const demo = filterProfessors(DEMO_PROFESSORS, filters)
+          if (demo.length > 0) {
+            return { professors: demo, total: demo.length, isDemo: true as const }
+          }
+        }
+        return { ...result, isDemo: false as const }
       } catch {
         const professors = filterProfessors(DEMO_PROFESSORS, filters)
         return { professors, total: professors.length, isDemo: true as const }

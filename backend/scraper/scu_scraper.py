@@ -191,7 +191,7 @@ def scrape_all_faculty() -> list[dict]:
                     seen_names.add(key)
                     all_faculty.append(p)
 
-        print(f"[SCU]  → Found {len(all_faculty)} unique faculty so far")
+        print(f"[SCU]  -> Found {len(all_faculty)} unique faculty so far")
 
     return all_faculty
 

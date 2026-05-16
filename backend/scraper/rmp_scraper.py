@@ -8,7 +8,7 @@ import time
 import re
 
 RMP_GRAPHQL = "https://www.ratemyprofessors.com/graphql"
-SCU_SCHOOL_ID = "U2Nob29sLTEwNzg="  # base64("School-1078")
+SCU_SCHOOL_ID = "U2Nob29sLTg4Mg=="  # base64("School-882") — Santa Clara University
 
 HEADERS = {
     "Authorization": "Basic dGVzdDp0ZXN0",
@@ -20,10 +20,9 @@ HEADERS = {
 SEARCH_QUERY = """
 query TeacherSearchResultsPageQuery(
   $query: TeacherSearchQuery!
-  $schoolID: ID
 ) {
   search: newSearch {
-    teachers(query: $query, schoolID: $schoolID, first: 1000) {
+    teachers(query: $query, first: 1000) {
       didFallback
       edges {
         node {
@@ -63,7 +62,6 @@ def search_professors(query: str = "") -> list[dict]:
         "query": SEARCH_QUERY,
         "variables": {
             "query": {"text": query, "schoolID": SCU_SCHOOL_ID},
-            "schoolID": SCU_SCHOOL_ID,
         },
     }
 
@@ -71,7 +69,12 @@ def search_professors(query: str = "") -> list[dict]:
         resp = requests.post(RMP_GRAPHQL, json=payload, headers=HEADERS, timeout=30)
         resp.raise_for_status()
         data = resp.json()
-        edges = data.get("data", {}).get("search", {}).get("teachers", {}).get("edges", [])
+        if data.get("errors"):
+            print(f"[RMP] GraphQL errors: {data['errors'][:1]}")
+            return []
+        search = (data.get("data") or {}).get("search") or {}
+        teachers = search.get("teachers") or {}
+        edges = teachers.get("edges") or []
         return [e["node"] for e in edges if e.get("node")]
     except Exception as e:
         print(f"[RMP] Error fetching professors: {e}")

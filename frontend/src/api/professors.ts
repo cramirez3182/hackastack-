@@ -16,7 +16,7 @@ export async function fetchProfessors(filters: Filters): Promise<{ professors: P
   filters.tags.forEach(tag => params.append('tags', tag))
   params.set('sort_by', filters.sortBy)
   params.set('sort_dir', filters.sortDir)
-  params.set('limit', '300')
+  params.set('limit', '500')
 
   const res = await fetch(`${BASE}/professors?${params}`)
   if (!res.ok) throw new Error('Failed to fetch professors')

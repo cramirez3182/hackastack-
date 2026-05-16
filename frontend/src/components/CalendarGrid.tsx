@@ -151,7 +151,7 @@ export function GridView({
   }
 
   return (
-    <div className="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 overflow-y-auto content-start">
+    <div className="p-4 grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 content-start">
       {professors.map(prof => (
         <ProfessorCard
           key={prof.id}

@@ -65,7 +65,7 @@ export function FilterPanel({ filters, searchInput, onSearchInputChange, onChang
   }
 
   return (
-    <aside className="w-72 flex-shrink-0 bg-white border-r border-gray-200 h-full overflow-y-auto">
+    <aside className="w-72 flex-shrink-0 bg-white border-r border-gray-200 h-full min-h-0 overflow-y-auto overscroll-contain">
       <div className="p-4 border-b border-gray-100 sticky top-0 bg-white z-10">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2 font-semibold text-gray-800">

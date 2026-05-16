@@ -47,7 +47,7 @@ async def get_professors(
     search: Optional[str] = None,
     sort_by: str = "avg_rating",
     sort_dir: str = "desc",
-    limit: int = 200,
+    limit: int = 500,
     offset: int = 0,
 ):
     conditions = []

@@ -120,7 +120,7 @@ export default function App() {
   const isBackendDown = isError && !isDemo
 
   return (
-    <div className="flex flex-col h-screen bg-gray-50 overflow-hidden">
+    <div className="flex flex-col h-screen min-h-0 bg-gray-50 overflow-hidden">
       <header className="bg-white border-b border-gray-200 px-4 py-3 flex items-center gap-4 flex-shrink-0 shadow-sm z-30">
         <div className="flex items-center gap-2.5">
           <div className="w-8 h-8 rounded-lg bg-scu-red flex items-center justify-center">
@@ -159,9 +159,13 @@ export default function App() {
               <GitCompare size={12} /> {compareList.length} comparing
             </span>
           )}
-          {isDemo && (
+          {isDemo ? (
             <span className="text-xs text-purple-700 bg-purple-50 border border-purple-200 px-2 py-1 rounded-lg">
-              Demo mode — run scraper for live data
+              Demo data — start backend + run scraper
+            </span>
+          ) : (
+            <span className="text-xs text-emerald-700 bg-emerald-50 border border-emerald-200 px-2 py-1 rounded-lg">
+              Live SCU + Workday schedule + RMP
             </span>
           )}
           {isBackendDown ? (
@@ -190,7 +194,7 @@ export default function App() {
         <QuickFilters activeId={activePresetId} onSelect={applyPreset} onWizard={() => setWizardOpen(true)} />
       </div>
 
-      <div className="flex flex-1 overflow-hidden">
+      <div className="flex flex-1 min-h-0 overflow-hidden">
         <FilterPanel
           filters={filters}
           searchInput={searchInput}
@@ -199,7 +203,7 @@ export default function App() {
           total={professors.length}
         />
 
-        <main className="flex-1 overflow-hidden flex flex-col min-w-0">
+        <main className="flex-1 min-h-0 overflow-hidden flex flex-col min-w-0">
           <ActiveFilterPills
             filters={filters}
             onChange={updateFilters}
@@ -223,7 +227,7 @@ export default function App() {
           )}
 
           {(!isLoading || data) && (
-            <div className="flex-1 overflow-hidden pb-24">
+            <div className="flex-1 min-h-0 overflow-y-auto overscroll-contain pb-28">
               {view === 'grid' ? (
                 <GridView
                   professors={professors}
