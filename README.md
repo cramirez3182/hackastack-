@@ -121,4 +121,4 @@ python -m scraper.rmp_scraper
 
 ## Team
 
-Built for SCU students — Hackastack project (Jorge Garcia Diaz and team).
+Built for SCU students — Hackastack project (Jorge, Cuitlahuac, Damian, and Estevan).
