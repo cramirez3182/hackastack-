@@ -89,6 +89,46 @@ app.get('/trtc-client-config', (req, res) => {
   })
 })
 
+app.post('/chat', async (req, res) => {
+  const { message, history = [], professorContext = [] } = req.body
+  if (!message) { res.status(400).json({ error: 'message required' }); return }
+
+  const systemPrompt = `You are an SCU Course Optimizer AI Advisor helping students at Santa Clara University choose professors and courses.
+Be concise, friendly, and helpful. Answer based on the professor data provided.
+Current professor data (top 30 by rating):
+${professorContext.map(p =>
+  `- ${p.name} (${p.department}): rating ${p.rating}/5, difficulty ${p.difficulty}/5, ${p.wouldTakeAgain}% would take again. Courses: ${p.courses.join(', ')}. Tags: ${p.tags.join(', ')}`
+).join('\n')}`
+
+  try {
+    const response = await fetch(process.env.LLM_API_URL || 'https://api.openai.com/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        'Content-Type': 'application/json',
+        'Authorization': `Bearer ${process.env.LLM_API_KEY}`,
+      },
+      body: JSON.stringify({
+        model: process.env.LLM_MODEL || 'gpt-4o',
+        messages: [
+          { role: 'system', content: systemPrompt },
+          ...history.slice(-10),
+          { role: 'user', content: message },
+        ],
+        max_tokens: 400,
+        temperature: 0.7,
+      }),
+    })
+    if (!response.ok) {
+      const err = await response.json().catch(() => ({}))
+      throw new Error(err.error?.message || `OpenAI error ${response.status}`)
+    }
+    const data = await response.json()
+    res.json({ reply: data.choices[0].message.content })
+  } catch (e) {
+    res.status(500).json({ error: e.message })
+  }
+})
+
 app.post('/start-conversation', (req, res) => {
   const { RoomId } = req.body
   if (!RoomId) { res.status(400).json({ error: 'RoomId required' }); return }
