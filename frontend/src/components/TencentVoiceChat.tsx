@@ -47,7 +47,7 @@ export function TencentVoiceChat({ professors, onClose }: Props) {
         body: JSON.stringify({
           message: text,
           history: messages.map(m => ({ role: m.role, content: m.content })),
-          professorContext: professors.map(p => ({
+          professorContext: professors.slice(0, 150).map(p => ({
             name: p.full_name,
             department: p.department,
             rating: p.avg_rating,
