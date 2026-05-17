@@ -93,11 +93,28 @@ app.post('/chat', async (req, res) => {
   const { message, history = [], professorContext = [] } = req.body
   if (!message) { res.status(400).json({ error: 'message required' }); return }
 
-  const systemPrompt = `You are an SCU Course Optimizer AI Advisor helping students at Santa Clara University choose professors and courses.
-Be concise, friendly, and helpful. Answer based on the professor data provided.
-Current professor data (top 30 by rating):
-${professorContext.map(p =>
-  `- ${p.name} (${p.department}): rating ${p.rating}/5, difficulty ${p.difficulty}/5, ${p.wouldTakeAgain}% would take again. Courses: ${p.courses.join(', ')}. Tags: ${p.tags.join(', ')}`
+  // Pull full professor list from the Python API so no one gets missed
+  let allProfessors = professorContext
+  try {
+    const apiRes = await fetch('http://localhost:8000/api/professors?limit=2000&sort_by=avg_rating&sort_dir=desc')
+    if (apiRes.ok) {
+      const apiData = await apiRes.json()
+      allProfessors = (apiData.professors || []).map(p => ({
+        name: p.full_name,
+        department: p.department,
+        rating: p.avg_rating,
+        difficulty: p.avg_difficulty,
+        wouldTakeAgain: p.would_take_again_percent,
+        courses: (p.courses_taught || []).slice(0, 4),
+        tags: (p.tags || []).slice(0, 4),
+      }))
+    }
+  } catch {}
+
+  const systemPrompt = `You are an SCU Course Optimizer AI Advisor helping Santa Clara University students pick professors and courses. Be concise and friendly.
+Professor data (${allProfessors.length} professors):
+${allProfessors.slice(0, 200).map(p =>
+  `${p.name}|${p.department}|★${p.rating}|diff${p.difficulty}|${p.wouldTakeAgain}%again|${p.courses.join(',')}|${p.tags.join(',')}`
 ).join('\n')}`
 
   try {
