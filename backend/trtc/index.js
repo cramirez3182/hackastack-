@@ -93,13 +93,14 @@ app.post('/chat', async (req, res) => {
   const { message, history = [], professorContext = [] } = req.body
   if (!message) { res.status(400).json({ error: 'message required' }); return }
 
-  // Pull full professor list from the Python API so no one gets missed
-  let allProfessors = professorContext
+  // Fetch all professors then pick relevant ones to stay within token limits
+  let topProfs = professorContext.slice(0, 120)
+  let namedProfs = []
   try {
     const apiRes = await fetch('http://localhost:8000/api/professors?limit=2000&sort_by=avg_rating&sort_dir=desc')
     if (apiRes.ok) {
       const apiData = await apiRes.json()
-      allProfessors = (apiData.professors || []).map(p => ({
+      const all = (apiData.professors || []).map(p => ({
         name: p.full_name,
         department: p.department,
         rating: p.avg_rating,
@@ -108,13 +109,28 @@ app.post('/chat', async (req, res) => {
         courses: (p.courses_taught || []).slice(0, 4),
         tags: (p.tags || []).slice(0, 4),
       }))
+
+      // Extract words from message to match professors by name/dept/course
+      const words = message.toLowerCase().split(/\W+/).filter(w => w.length > 2)
+      namedProfs = all.filter(p =>
+        words.some(w =>
+          p.name.toLowerCase().includes(w) ||
+          p.department.toLowerCase().includes(w) ||
+          p.courses.some(c => c.toLowerCase().includes(w))
+        )
+      )
+      topProfs = all.slice(0, 120)
     }
   } catch {}
 
+  // Always include named/matched profs, fill rest with top-rated up to 120 total
+  const namedIds = new Set(namedProfs.map(p => p.name))
+  const combined = [...namedProfs, ...topProfs.filter(p => !namedIds.has(p.name))].slice(0, 120)
+
   const systemPrompt = `You are an SCU Course Optimizer AI Advisor helping Santa Clara University students pick professors and courses. Be concise and friendly.
-Professor data (${allProfessors.length} professors):
-${allProfessors.slice(0, 200).map(p =>
-  `${p.name}|${p.department}|★${p.rating}|diff${p.difficulty}|${p.wouldTakeAgain}%again|${p.courses.join(',')}|${p.tags.join(',')}`
+Professor data (${combined.length} shown):
+${combined.map(p =>
+  `${p.name}|${p.department}|${p.rating}★|diff${p.difficulty}|${p.wouldTakeAgain}%again|${p.courses.join(',')}|${p.tags.join(',')}`
 ).join('\n')}`
 
   try {
