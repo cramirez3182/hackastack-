@@ -26,7 +26,7 @@ function SliderField({
       <input
         type="range" min={min} max={max} step={step} value={value}
         onChange={e => onChange(Number(e.target.value))}
-        className="w-full accent-blue-600 cursor-pointer"
+        className="w-full accent-scu-red cursor-pointer"
       />
       <div className="flex justify-between text-xs text-gray-400">
         <span>{min}</span><span>{max}</span>
@@ -59,11 +59,11 @@ export function FilterPanel({ filters, searchInput, onSearchInputChange, onChang
       <div className="p-4 border-b border-gray-100 sticky top-0 bg-white z-10">
         <div className="flex items-center justify-between mb-3">
           <div className="flex items-center gap-2 font-semibold text-gray-800">
-            <SlidersHorizontal size={16} className="text-blue-600" />
+            <SlidersHorizontal size={16} className="text-scu-red" />
             Filters
           </div>
           <div className="flex items-center gap-2">
-            <span className="text-xs bg-blue-100 text-blue-700 px-2 py-0.5 rounded-full font-medium">
+            <span className="text-xs bg-scu-red text-white px-2 py-0.5 rounded-full font-medium">
               {total} professors
             </span>
             {hasActiveFilters && (
@@ -83,7 +83,7 @@ export function FilterPanel({ filters, searchInput, onSearchInputChange, onChang
             placeholder="Search professors... (press /)"
             value={searchInput}
             onChange={e => onSearchInputChange(e.target.value)}
-            className="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500 focus:border-transparent"
+              className="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-scu-red focus:border-transparent"
           />
           {searchInput && (
             <button type="button" onClick={() => { onSearchInputChange(''); onChange({ search: '' }) }} className="absolute right-2 top-1/2 -translate-y-1/2 text-gray-400 hover:text-gray-600">
@@ -137,8 +137,8 @@ export function FilterPanel({ filters, searchInput, onSearchInputChange, onChang
                 onClick={() => onChange({ tenureTrack: opt })}
                 className={`flex-1 py-1.5 text-xs rounded-lg border font-medium transition-colors ${
                   filters.tenureTrack === opt
-                    ? 'bg-blue-600 border-blue-600 text-white'
-                    : 'border-gray-200 text-gray-600 hover:border-blue-400'
+                    ? 'bg-scu-red border-scu-red text-white'
+                      : 'border-gray-200 text-gray-600 hover:border-scu-red'
                 }`}
               >
                 {opt === 'all' ? 'All' : opt === 'yes' ? 'Yes' : 'No'}
@@ -159,8 +159,8 @@ export function FilterPanel({ filters, searchInput, onSearchInputChange, onChang
                 onClick={() => onChange({ hasSchedule: opt })}
                 className={`flex-1 py-1.5 text-xs rounded-lg border font-medium transition-colors ${
                   filters.hasSchedule === opt
-                    ? 'bg-blue-600 border-blue-600 text-white'
-                    : 'border-gray-200 text-gray-600 hover:border-blue-400'
+                    ? 'bg-scu-red border-scu-red text-white'
+                    : 'border-gray-200 text-gray-600 hover:border-scu-red'
                 }`}
               >
                 {opt === 'all' ? 'All' : opt === 'yes' ? 'Yes' : 'No'}
@@ -181,7 +181,7 @@ export function FilterPanel({ filters, searchInput, onSearchInputChange, onChang
               placeholder="e.g. COEN 20, MATH 11"
               value={filters.course}
               onChange={e => onChange({ course: e.target.value })}
-              className="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full pl-8 pr-3 py-2 text-sm border border-gray-200 rounded-lg focus:outline-none focus:ring-2 focus:ring-scu-red"
             />
           </div>
         </section>
@@ -198,10 +198,10 @@ export function FilterPanel({ filters, searchInput, onSearchInputChange, onChang
             {deptOpen ? <ChevronUp size={14} /> : <ChevronDown size={14} />}
           </button>
           {deptOpen && (
-            <select
+              <select
               value={filters.department}
               onChange={e => onChange({ department: e.target.value })}
-              className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-scu-red"
             >
               <option value="">All Departments</option>
               {(deptData ?? []).map(d => (
@@ -227,7 +227,7 @@ export function FilterPanel({ filters, searchInput, onSearchInputChange, onChang
               <select
                 value={filters.sortBy}
                 onChange={e => onChange({ sortBy: e.target.value as Filters['sortBy'] })}
-                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-blue-500"
+                className="w-full text-sm border border-gray-200 rounded-lg px-3 py-2 focus:outline-none focus:ring-2 focus:ring-scu-red"
               >
                 <option value="avg_rating">Rating</option>
                 <option value="avg_difficulty">Difficulty</option>
@@ -242,8 +242,8 @@ export function FilterPanel({ filters, searchInput, onSearchInputChange, onChang
                     onClick={() => onChange({ sortDir: dir })}
                     className={`flex-1 py-1.5 text-xs rounded-lg border font-medium transition-colors ${
                       filters.sortDir === dir
-                        ? 'bg-blue-600 border-blue-600 text-white'
-                        : 'border-gray-200 text-gray-600 hover:border-blue-400'
+                        ? 'bg-scu-red border-scu-red text-white'
+                        : 'border-gray-200 text-gray-600 hover:border-scu-red'
                     }`}
                   >
                     {dir === 'desc' ? '↓ High → Low' : '↑ Low → High'}

@@ -13,7 +13,7 @@ interface Props {
 const FEATURES = [
   {
     icon: <SlidersHorizontal size={22} />,
-    color: 'bg-blue-500',
+    color: 'bg-scu-red',
     title: 'Smart Filtering',
     desc: 'Filter by rating, difficulty, "would take again" %, tenure status, and department — results update instantly.',
   },
@@ -52,7 +52,7 @@ const FEATURES = [
 const HOW_IT_WORKS = [
   {
     icon: <Users size={24} />,
-    color: 'from-blue-500 to-blue-700',
+    color: 'from-scu-red to-scu-red',
     step: '01',
     title: 'Browse all SCU professors',
     desc: '300+ current faculty from every school and department, cross-referenced with the official SCU directory. No account needed.',
@@ -344,7 +344,7 @@ export function LandingPage({ onEnter }: Props) {
       <section id="how-it-works" className="bg-gray-50 border-y border-gray-100 py-24">
         <div className="max-w-5xl mx-auto px-8">
           <div className="text-center mb-14">
-            <div className="inline-flex items-center gap-2 bg-blue-100 text-blue-700 text-sm font-semibold px-4 py-1.5 rounded-full mb-4">
+            <div className="inline-flex items-center gap-2 bg-scu-red text-white text-sm font-semibold px-4 py-1.5 rounded-full mb-4">
               <ChevronRight size={14} /> How it works
             </div>
             <h2 className="text-4xl font-extrabold text-gray-900 mb-3">Open the app and go</h2>

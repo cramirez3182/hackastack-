@@ -174,7 +174,7 @@ export function ProfessorModal({
                     key={tag}
                     type="button"
                     onClick={() => { onTagClick?.(tag); onClose() }}
-                    className={`text-xs px-2.5 py-1 rounded-full border font-medium ${textColor} bg-opacity-10 border-current hover:bg-blue-50 hover:border-blue-300 transition-colors`}
+                    className={`text-xs px-2.5 py-1 rounded-full border font-medium ${textColor} bg-opacity-10 border-current hover:bg-scu-red hover:border-scu-red transition-colors`}
                   >
                     {tag}
                   </button>
@@ -195,7 +195,7 @@ export function ProfessorModal({
                     key={course}
                     type="button"
                     onClick={() => { onCourseClick?.(course); onClose() }}
-                    className="text-xs bg-gray-100 text-gray-700 px-2.5 py-1 rounded-lg font-mono hover:bg-blue-100 hover:text-blue-800 transition-colors"
+                    className="text-xs bg-gray-100 text-gray-700 px-2.5 py-1 rounded-lg font-mono hover:bg-scu-red hover:text-white transition-colors"
                   >
                     {course}
                   </button>
@@ -239,7 +239,7 @@ export function ProfessorModal({
 
                   return (
                     <div key={i} className="flex items-center gap-2 bg-gray-50 rounded-lg px-3 py-2 text-sm flex-wrap">
-                      <span className="font-bold text-blue-700 text-xs bg-blue-100 px-2 py-0.5 rounded-md flex-shrink-0">
+                      <span className="font-bold text-white text-xs bg-scu-red px-2 py-0.5 rounded-md flex-shrink-0">
                         {slot.dayPattern}
                       </span>
                       <span className="text-gray-500 text-xs flex-shrink-0">

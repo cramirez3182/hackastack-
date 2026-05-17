@@ -46,7 +46,7 @@ export function ActiveFilterPills({ filters, onChange, showFavoritesOnly, onTogg
           key={i}
           type="button"
           onClick={pill.clear}
-          className="flex items-center gap-1 text-xs bg-blue-50 text-blue-700 border border-blue-200 px-2.5 py-1 rounded-full hover:bg-blue-100 transition-colors"
+          className="flex items-center gap-1 text-xs bg-scu-red text-white border border-scu-red px-2.5 py-1 rounded-full hover:bg-red-900 transition-colors"
         >
           {pill.label}
           <X size={11} />

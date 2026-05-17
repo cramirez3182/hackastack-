@@ -61,7 +61,7 @@ export function ProfessorCard({
   return (
     <div
       className={`relative w-full rounded-xl border-2 ${bgColor} overflow-hidden hover:shadow-xl transition-all duration-200 hover:scale-[1.015] hover:-translate-y-0.5 group ${
-        isComparing ? 'ring-2 ring-blue-500 ring-offset-1' : ''
+        isComparing ? 'ring-2 ring-scu-red ring-offset-1' : ''
       }`}
     >
       {/* School color accent strip */}
@@ -82,7 +82,7 @@ export function ProfessorCard({
           <button
             type="button"
             onClick={e => { e.stopPropagation(); onCompareToggle(p) }}
-            className={`p-1.5 rounded-lg bg-white/90 shadow-sm transition-colors ${isComparing ? 'text-blue-600' : 'text-gray-400 hover:text-blue-600'}`}
+            className={`p-1.5 rounded-lg bg-white/90 shadow-sm transition-colors ${isComparing ? 'text-scu-red' : 'text-gray-400 hover:text-scu-red'}`}
           >
             <GitCompare size={14} />
           </button>
@@ -169,7 +169,7 @@ export function ProfessorCard({
                 onClick={e => { e.stopPropagation(); onTagClick?.(tag) }}
                 className={`text-xs px-2 py-0.5 rounded-full border transition-colors ${
                   onTagClick
-                    ? 'bg-white/80 text-gray-600 border-gray-200 hover:bg-blue-100 hover:border-blue-300 hover:text-blue-700 cursor-pointer'
+                    ? 'bg-white/80 text-gray-600 border-gray-200 hover:bg-scu-red hover:border-scu-red hover:text-white cursor-pointer'
                     : 'bg-white/80 text-gray-600 border-gray-200'
                 }`}
               >
@@ -198,7 +198,7 @@ export function ProfessorCard({
                   )}
                 </div>
                 <div className="text-gray-500 mt-0.5 truncate">
-                  <span className="font-medium text-blue-700">{slot.dayPattern}</span>
+                  <span className="font-medium text-scu-red">{slot.dayPattern}</span>
                   {' '}{formatTimeRange(slot.start_time, slot.end_time)}
                   {slot.room && <span className="text-gray-400"> · {slot.room}</span>}
                 </div>

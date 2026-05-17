@@ -94,7 +94,7 @@ export function ProfessorFinderWizard({ open, onClose, onApply, matchCount }: Pr
               <h2 className="text-lg font-bold mb-1">What matters most?</h2>
               <div className="space-y-2 mt-3">
                 {PRIORITIES.map(p => (
-                  <button key={p.id} type="button" onClick={() => setPriority(p.id)} className={`w-full p-3 rounded-xl border-2 text-left ${priority === p.id ? 'border-blue-500 bg-blue-50' : 'border-gray-200'}`}>
+                  <button key={p.id} type="button" onClick={() => setPriority(p.id)} className={`w-full p-3 rounded-xl border-2 text-left ${priority === p.id ? 'border-scu-red bg-scu-red text-white' : 'border-gray-200'}`}>
                     <div className="font-semibold text-sm">{p.label}</div>
                     <div className="text-xs text-gray-500">{p.desc}</div>
                   </button>
@@ -107,7 +107,7 @@ export function ProfessorFinderWizard({ open, onClose, onApply, matchCount }: Pr
               <h2 className="text-lg font-bold mb-1">Teaching style?</h2>
               <div className="flex flex-wrap gap-2 my-3">
                 {TRAITS.map(tag => (
-                  <button key={tag} type="button" onClick={() => toggleTrait(tag)} className={`px-3 py-1.5 rounded-full text-sm border ${traits.includes(tag) ? 'bg-blue-600 border-blue-600 text-white' : 'border-gray-200'}`}>{tag}</button>
+                  <button key={tag} type="button" onClick={() => toggleTrait(tag)} className={`px-3 py-1.5 rounded-full text-sm border ${traits.includes(tag) ? 'bg-scu-red border-scu-red text-white' : 'border-gray-200'}`}>{tag}</button>
                 ))}
               </div>
               <label className="flex items-center gap-3 p-3 rounded-xl border cursor-pointer">
@@ -119,7 +119,7 @@ export function ProfessorFinderWizard({ open, onClose, onApply, matchCount }: Pr
           {step === 3 && (
             <>
               <h2 className="text-lg font-bold mb-1">Ready!</h2>
-              <p className="text-sm text-gray-500">About <strong className="text-blue-600">{matchCount}</strong> professors match.</p>
+              <p className="text-sm text-gray-500">About <strong className="text-scu-red">{matchCount}</strong> professors match.</p>
             </>
           )}
         </div>
@@ -127,7 +127,7 @@ export function ProfessorFinderWizard({ open, onClose, onApply, matchCount }: Pr
           {step > 0 && <button type="button" onClick={() => setStep(s => s - 1)} className="px-4 py-2 border rounded-xl text-sm"><ChevronLeft size={16} className="inline" /> Back</button>}
           <div className="flex-1" />
           {step < totalSteps - 1 ? (
-            <button type="button" disabled={!canNext} onClick={() => setStep(s => s + 1)} className="px-5 py-2 bg-blue-600 text-white rounded-xl text-sm font-semibold disabled:opacity-40">Next <ChevronRight size={16} className="inline" /></button>
+            <button type="button" disabled={!canNext} onClick={() => setStep(s => s + 1)} className="px-5 py-2 bg-scu-red text-white rounded-xl text-sm font-semibold disabled:opacity-40">Next <ChevronRight size={16} className="inline" /></button>
           ) : (
             <button type="button" onClick={handleApply} className="px-5 py-2 bg-scu-red text-white rounded-xl text-sm font-semibold">Show professors</button>
           )}

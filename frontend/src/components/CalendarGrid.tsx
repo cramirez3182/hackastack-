@@ -152,7 +152,7 @@ export function CalendarGrid({ professors, savedSlots, onSelect }: Props) {
                   {events.map(({ prof, slot }, idx) => {
                     const n = events.length
                     const isSaved = (prof as any).__saved || String(prof.id).startsWith('saved-')
-                    const dotColor = isSaved ? 'bg-red-600' : (SCHOOL_COLORS[prof.school] ?? 'bg-gray-400')
+                    const dotColor = isSaved ? 'bg-scu-red' : (SCHOOL_COLORS[prof.school] ?? 'bg-gray-400')
                     const start = parseTime(slot.start_time)
                     const end = parseTime(slot.end_time)
                     const startH = Math.floor(start)
@@ -169,7 +169,7 @@ export function CalendarGrid({ professors, savedSlots, onSelect }: Props) {
                         key={`${prof.id}-${slot.day}-${slot.start_time}-${slot.end_time}`}
                         onClick={() => onSelect(prof)}
                         title={tooltip}
-                        className={`absolute rounded px-2 py-1 text-xs font-medium text-white ${dotColor} hover:opacity-90 transition-opacity shadow-sm flex flex-col justify-center`}
+                        className={`absolute rounded px-2 py-1 text-xs font-medium text-white ${dotColor} ${isSaved ? 'hover:bg-red-900' : 'hover:opacity-90'} transition-colors shadow-sm flex flex-col justify-center`}
                         style={{ height: `${heightPx}px`, zIndex: 10, left: `${leftPct}%`, width: `calc(${widthPct}% - 6px)`, top: `${minuteOffset * ROW_HEIGHT}px` }}
                       >
                         <div className="truncate">{prof.last_name}{isSaved ? ' (Saved)' : ''}</div>

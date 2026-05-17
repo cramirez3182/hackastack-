@@ -63,7 +63,7 @@ export interface SavedSlot {
 }
 
 export const SCHOOL_COLORS: Record<string, string> = {
-  'College of Arts & Sciences': 'bg-blue-500',
+  'College of Arts & Sciences': 'bg-scu-red',
   'Leavey School of Business': 'bg-green-500',
   'School of Engineering': 'bg-purple-500',
   'School of Law': 'bg-red-500',
@@ -73,7 +73,7 @@ export const SCHOOL_COLORS: Record<string, string> = {
 }
 
 export const SCHOOL_TEXT_COLORS: Record<string, string> = {
-  'College of Arts & Sciences': 'text-blue-700',
+  'College of Arts & Sciences': 'text-scu-red',
   'Leavey School of Business': 'text-green-700',
   'School of Engineering': 'text-purple-700',
   'School of Law': 'text-red-700',
@@ -83,7 +83,7 @@ export const SCHOOL_TEXT_COLORS: Record<string, string> = {
 }
 
 export const SCHOOL_BG_COLORS: Record<string, string> = {
-  'College of Arts & Sciences': 'bg-blue-50 border-blue-200',
+  'College of Arts & Sciences': 'bg-scu-red border-scu-red',
   'Leavey School of Business': 'bg-green-50 border-green-200',
   'School of Engineering': 'bg-purple-50 border-purple-200',
   'School of Law': 'bg-red-50 border-red-200',

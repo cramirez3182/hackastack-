@@ -69,7 +69,7 @@ export function VoiceChat({ filters, professors, onClose }: Props) {
     <div className="fixed bottom-6 right-6 z-40 w-96 max-h-[80vh] flex flex-col bg-white rounded-2xl shadow-2xl border border-gray-200 overflow-hidden">
 
       {/* Header */}
-      <div className="bg-gradient-to-r from-blue-600 to-purple-600 px-4 py-3 flex items-center gap-3 flex-shrink-0">
+      <div className="bg-gradient-to-r from-scu-red to-purple-600 px-4 py-3 flex items-center gap-3 flex-shrink-0">
         <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center">
           <Bot size={18} className="text-white" />
         </div>
@@ -97,13 +97,13 @@ export function VoiceChat({ filters, professors, onClose }: Props) {
         {messages.map((msg, i) => (
           <div key={i} className={`flex ${msg.role === 'user' ? 'justify-end' : 'justify-start'}`}>
             {msg.role === 'assistant' && (
-              <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center flex-shrink-0 mr-2 mt-0.5">
+              <div className="w-6 h-6 rounded-full bg-gradient-to-br from-scu-red to-purple-500 flex items-center justify-center flex-shrink-0 mr-2 mt-0.5">
                 <Bot size={12} className="text-white" />
               </div>
             )}
             <div className={`max-w-[82%] rounded-2xl px-3 py-2 text-sm leading-relaxed ${
               msg.role === 'user'
-                ? 'bg-blue-600 text-white rounded-br-sm'
+                ? 'bg-scu-red text-white rounded-br-sm'
                 : 'bg-white text-gray-800 shadow-sm border border-gray-100 rounded-bl-sm'
             }`}>
               {msg.content}
@@ -113,18 +113,18 @@ export function VoiceChat({ filters, professors, onClose }: Props) {
 
         {isLoading && (
           <div className="flex justify-start">
-            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-blue-500 to-purple-500 flex items-center justify-center flex-shrink-0 mr-2 mt-0.5">
+            <div className="w-6 h-6 rounded-full bg-gradient-to-br from-scu-red to-purple-500 flex items-center justify-center flex-shrink-0 mr-2 mt-0.5">
               <Bot size={12} className="text-white" />
             </div>
             <div className="bg-white border border-gray-100 rounded-2xl rounded-bl-sm px-3 py-2 shadow-sm">
-              <Loader2 size={16} className="animate-spin text-blue-500" />
+              <Loader2 size={16} className="animate-spin text-scu-red" />
             </div>
           </div>
         )}
 
         {isListening && transcript && (
           <div className="flex justify-end">
-            <div className="max-w-[82%] bg-blue-100 border border-blue-200 text-blue-800 rounded-2xl rounded-br-sm px-3 py-2 text-sm italic">
+            <div className="max-w-[82%] bg-scu-red border border-scu-red text-white rounded-2xl rounded-br-sm px-3 py-2 text-sm italic">
               {transcript}
             </div>
           </div>
@@ -138,7 +138,7 @@ export function VoiceChat({ filters, professors, onClose }: Props) {
                 key={p}
                 type="button"
                 onClick={() => handleSend(p)}
-                className="w-full text-left text-xs bg-white border border-gray-200 rounded-xl px-3 py-2 text-gray-600 hover:border-blue-400 hover:text-blue-600 transition-colors"
+                className="w-full text-left text-xs bg-white border border-gray-200 rounded-xl px-3 py-2 text-gray-600 hover:border-scu-red hover:text-scu-red transition-colors"
               >
                 {p}
               </button>
@@ -182,7 +182,7 @@ export function VoiceChat({ filters, professors, onClose }: Props) {
               className={`p-2.5 rounded-xl flex-shrink-0 transition-all ${
                 isListening
                   ? 'bg-red-500 text-white animate-pulse shadow-lg shadow-red-200'
-                  : 'bg-gray-100 text-gray-600 hover:bg-blue-100 hover:text-blue-600'
+                    : 'bg-gray-100 text-gray-600 hover:bg-scu-red hover:text-white'
               }`}
             >
               {isListening ? <MicOff size={18} /> : <Mic size={18} />}
@@ -195,14 +195,14 @@ export function VoiceChat({ filters, professors, onClose }: Props) {
             placeholder={isListening ? 'Listening…' : 'Ask about any professor…'}
             rows={1}
             disabled={isListening}
-            className="flex-1 resize-none rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-blue-500 disabled:bg-gray-50 max-h-28 overflow-y-auto"
+            className="flex-1 resize-none rounded-xl border border-gray-200 px-3 py-2.5 text-sm focus:outline-none focus:ring-2 focus:ring-scu-red disabled:bg-gray-50 max-h-28 overflow-y-auto"
             style={{ minHeight: '42px' }}
           />
           <button
             type="button"
             onClick={() => handleSend(input)}
             disabled={!input.trim() || isLoading}
-            className="p-2.5 bg-blue-600 text-white rounded-xl hover:bg-blue-700 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex-shrink-0"
+            className="p-2.5 bg-scu-red text-white rounded-xl hover:bg-red-900 disabled:opacity-40 disabled:cursor-not-allowed transition-colors flex-shrink-0"
           >
             <Send size={18} />
           </button>
@@ -224,7 +224,7 @@ export function VoiceChatButton({ onClick, isOpen }: { onClick: () => void; isOp
     <button
       type="button"
       onClick={onClick}
-      className="fixed bottom-6 right-6 z-40 w-14 h-14 bg-gradient-to-br from-blue-600 to-purple-600 text-white rounded-full shadow-xl hover:shadow-2xl hover:scale-110 transition-all duration-200 flex items-center justify-center group"
+      className="fixed bottom-6 right-6 z-40 w-14 h-14 bg-gradient-to-br from-scu-red to-purple-600 text-white rounded-full shadow-xl hover:shadow-2xl hover:scale-110 transition-all duration-200 flex items-center justify-center group"
       title="Open AI Professor Advisor"
     >
       <MessageCircle size={24} />

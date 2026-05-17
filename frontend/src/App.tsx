@@ -155,7 +155,7 @@ export default function App() {
             type="button"
             onClick={() => setView('grid')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
-              view === 'grid' ? 'bg-white shadow-sm text-blue-700' : 'text-gray-500 hover:text-gray-700'
+              view === 'grid' ? 'bg-white shadow-sm text-scu-red' : 'text-gray-500 hover:text-gray-700'
             }`}
           >
             <LayoutGrid size={15} /> Grid
@@ -164,7 +164,7 @@ export default function App() {
             type="button"
             onClick={() => setView('calendar')}
             className={`flex items-center gap-1.5 px-3 py-1.5 rounded-md text-sm font-medium transition-all ${
-              view === 'calendar' ? 'bg-white shadow-sm text-blue-700' : 'text-gray-500 hover:text-gray-700'
+              view === 'calendar' ? 'bg-white shadow-sm text-scu-red' : 'text-gray-500 hover:text-gray-700'
             }`}
           >
             <Calendar size={15} /> Schedule
@@ -173,7 +173,7 @@ export default function App() {
 
         <div className="ml-auto flex items-center gap-3">
           {compareList.length > 0 && (
-            <span className="flex items-center gap-1 text-xs text-blue-600 bg-blue-50 px-2 py-1 rounded-lg">
+            <span className="flex items-center gap-1 text-xs text-white bg-scu-red px-2 py-1 rounded-lg">
               <GitCompare size={12} /> {compareList.length} comparing
             </span>
           )}
@@ -193,14 +193,14 @@ export default function App() {
             </div>
           ) : (
             <div className="flex items-center gap-1.5 text-xs text-gray-400">
-              <div className={`w-2 h-2 rounded-full ${isFetching ? 'bg-blue-400 animate-pulse' : 'bg-emerald-400'}`} />
+              <div className={`w-2 h-2 rounded-full ${isFetching ? 'bg-scu-red animate-pulse' : 'bg-emerald-400'}`} />
               {professors.length} professors
             </div>
           )}
           <button
             type="button"
             onClick={() => refetch()}
-            className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-blue-600 px-2 py-1.5 rounded-lg hover:bg-blue-50 transition-colors"
+            className="flex items-center gap-1.5 text-xs text-gray-500 hover:text-scu-red px-2 py-1.5 rounded-lg hover:bg-scu-red transition-colors"
             title="Refresh data"
           >
             <RefreshCw size={14} className={isFetching ? 'animate-spin' : ''} />
@@ -238,7 +238,7 @@ export default function App() {
           {isLoading && !data && (
             <div className="flex items-center justify-center h-full">
               <div className="text-center">
-                <div className="w-10 h-10 border-3 border-blue-500 border-t-transparent rounded-full animate-spin mx-auto mb-3" />
+                <div className="w-10 h-10 border-3 border-scu-red border-t-transparent rounded-full animate-spin mx-auto mb-3" />
                 <p className="text-sm text-gray-500">Loading professors...</p>
               </div>
             </div>

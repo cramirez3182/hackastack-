@@ -53,8 +53,8 @@ export function QuickFilters({ activeId, onSelect, onWizard }: Props) {
           onClick={() => onSelect(preset)}
           className={`flex items-center gap-1.5 px-3 py-1.5 rounded-full text-xs font-medium border shrink-0 transition-all hover:scale-105 ${
             activeId === preset.id
-              ? 'bg-blue-600 border-blue-600 text-white'
-              : 'bg-white border-gray-200 text-gray-600 hover:border-blue-400'
+              ? 'bg-scu-red border-scu-red text-white'
+              : 'bg-white border-gray-200 text-gray-600 hover:border-scu-red'
           }`}
         >
           {preset.icon}
